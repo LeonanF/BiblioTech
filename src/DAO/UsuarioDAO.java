@@ -18,7 +18,7 @@ public class UsuarioDAO {
 	public boolean cadastrarUsuario(UsuarioDTO objusuariodto) {
 		String sql = "insert into usuario (nome_usuario, email_usuario, senha_usuario, curso_usuario, matricula_usuario) values (?, ?, ?, ?, ?)";
 		
-		conn = new ConnectionDB().conectaBD();
+		conn = new ConnectionDB().getConnection();
 		
 		try {
 			

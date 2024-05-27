@@ -2,6 +2,7 @@ package DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Editora;
@@ -29,5 +30,37 @@ public class EditoraDAO {
 		return worked;
 		
 	}
+	
+	
+	public static Editora buscarEditora(String nome) {
+		ConnectionDB db = new ConnectionDB();
+		Connection conn = db.getConnection();
+		Editora editora = null;
+		
+		try {
+			PreparedStatement psSelect = conn.prepareStatement("SELECT * FROM EDITORA WHERE NOME = ?");
+			ResultSet rs = null;
+			psSelect.setString(1, nome);
+			
+			rs = psSelect.executeQuery();
+			
+			if(rs.next()) {
+				String nomeEditora = rs.getString("NOME");
+				String endereco = rs.getString("ENDERECO");
+				String telefone = rs.getString("TELEFONE");
+				String email = rs.getString("EMAIL");
+				
+				editora = new Editora(nomeEditora, endereco, telefone, email);
+			}
+			
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return editora;
+		
+	}
+	
 	
 }

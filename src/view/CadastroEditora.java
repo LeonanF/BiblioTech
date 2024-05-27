@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,23 +29,6 @@ public class CadastroEditora extends JFrame {
 	private JTextField campoEndereco;
 	private JTextField campoTelefone;
 	private JTextField campoEmail;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CadastroEditora frame = new CadastroEditora();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 
 	public CadastroEditora() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,9 +92,17 @@ public class CadastroEditora extends JFrame {
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(campoNome.getText().isBlank())
+				{
+					JOptionPane.showMessageDialog(contentPane, "O campo Nome deve ser preenchido.", "Alerta", JOptionPane.WARNING_MESSAGE);
+				    return;
+				}
 				if(EditoraController.cadastrarEditora(campoNome.getText(), campoEndereco.getText(), campoTelefone.getText(), campoEmail.getText())) {
 					JOptionPane.showMessageDialog(contentPane, "Editora cadastrada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
+					return;
 				}
 			}
 		});

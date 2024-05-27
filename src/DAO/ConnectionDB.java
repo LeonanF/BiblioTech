@@ -1,22 +1,34 @@
 package DAO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import javax.swing.JOptionPane;
-
 
 public class ConnectionDB {
-	public Connection conectaBD() {
-		Connection conn = null;
-		
+	private Connection connection;
+	private final String URLDB = "jdbc:mysql://localhost:3306/BiblioTech";
+	private final String user = "root";
+	private final String password = "root";
+	
+	public ConnectionDB() {
 		try {
-			String url = "jdbc:mysql://localhost:3306/bibliotech?user=root&password=";
-			conn = DriverManager.getConnection(url);
-		} catch (SQLException erro) {
-			JOptionPane.showMessageDialog(null, "Erro na classe ConnectionDB" + erro.getMessage());
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection(URLDB, user, password);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		
-		return conn;
+	}
+	
+	
+	public Connection getConnection() {
+		return this.connection;
+	}
+	
+	public void closeConnection() {
+		try {
+			if(this.connection!=null)
+				this.connection.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

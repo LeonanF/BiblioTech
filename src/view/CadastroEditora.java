@@ -20,6 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
+import javax.swing.ImageIcon;
 
 public class CadastroEditora extends JFrame {
 
@@ -40,93 +42,72 @@ public class CadastroEditora extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel cadastrarTitle = new JLabel("CADASTRAR EDITORA");
-		cadastrarTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		cadastrarTitle.setFont(new Font("Bahnschrift", Font.PLAIN, 18));
 		cadastrarTitle.setBounds(200, 20, 300, 30);
+		cadastrarTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		cadastrarTitle.setFont(new Font("Bahnschrift", Font.PLAIN, 30));
 		contentPane.add(cadastrarTitle);
 		
 		campoNome = new JTextField();
-		campoNome.setBounds(50, 160, 300, 30);
+		campoNome.setBounds(50, 114, 300, 30);
 		contentPane.add(campoNome);
 		campoNome.setColumns(10);
 		
 		campoEndereco = new JTextField();
+		campoEndereco.setBounds(50, 211, 300, 30);
 		campoEndereco.setColumns(10);
-		campoEndereco.setBounds(50, 280, 300, 30);
 		contentPane.add(campoEndereco);
 		
 		try {
 			campoTelefone = new JFormattedTextField(new MaskFormatter("(##) #####-####"));
+			campoTelefone.setBounds(50, 308, 300, 30);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		campoTelefone.setColumns(10);
-		campoTelefone.setBounds(50, 400, 300, 30);
 		contentPane.add(campoTelefone);
 		
 		campoEmail = new JTextField();
+		campoEmail.setBounds(50, 407, 300, 30);
 		campoEmail.setColumns(10);
-		campoEmail.setBounds(50, 520, 300, 30);
 		contentPane.add(campoEmail);
 		
 		JLabel nomeTitle = new JLabel("Nome");
+		nomeTitle.setBounds(50, 83, 300, 20);
 		nomeTitle.setFont(new Font("Arial", Font.PLAIN, 14));
-		nomeTitle.setBounds(50, 120, 300, 20);
 		contentPane.add(nomeTitle);
 		
 		JLabel enderecoTitle = new JLabel("Endereço");
+		enderecoTitle.setBounds(50, 180, 300, 20);
 		enderecoTitle.setFont(new Font("Arial", Font.PLAIN, 14));
-		enderecoTitle.setBounds(50, 240, 300, 20);
 		contentPane.add(enderecoTitle);
 		
 		JLabel telefoneTitle = new JLabel("Telefone");
+		telefoneTitle.setBounds(50, 277, 300, 20);
 		telefoneTitle.setFont(new Font("Arial", Font.PLAIN, 14));
-		telefoneTitle.setBounds(50, 360, 300, 20);
 		contentPane.add(telefoneTitle);
 		
-		JLabel emailTitle = new JLabel("Email");
+		JLabel emailTitle = new JLabel("E-mail");
+		emailTitle.setBounds(50, 376, 300, 20);
 		emailTitle.setFont(new Font("Arial", Font.PLAIN, 14));
-		emailTitle.setBounds(50, 480, 300, 20);
 		contentPane.add(emailTitle);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(campoNome.getText().isBlank())
-				{
-					JOptionPane.showMessageDialog(contentPane, "O campo Nome deve ser preenchido.", "Alerta", JOptionPane.WARNING_MESSAGE);
-				    return;
-				}
-				if(EditoraController.cadastrarEditora(campoNome.getText(), campoEndereco.getText(), campoTelefone.getText(), campoEmail.getText())) {
-					JOptionPane.showMessageDialog(contentPane, "Editora cadastrada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-				} else {
-					JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-			}
-		});
-		btnCadastrar.setBounds(150, 600, 125, 20);
-		btnCadastrar.setFont(new Font("Arial", Font.PLAIN, 14));
-        btnCadastrar.setBorderPainted(false);
-        btnCadastrar.setFocusPainted(false);
 		btnCadastrar.setForeground(new Color(128, 128, 0));
-		btnCadastrar.setBackground(new Color(240,240,240));
+		btnCadastrar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnCadastrar.setBackground(UIManager.getColor("Button.background"));
+		btnCadastrar.setBounds(178, 519, 172, 37);
 		contentPane.add(btnCadastrar);
 		
-		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		btnCancelar.setBounds(425, 600, 125, 20);
-		btnCancelar.setFont(new Font("Arial", Font.PLAIN, 14));
-		btnCancelar.setBorderPainted(false);
-        btnCancelar.setFocusPainted(false);
+		JButton btnCancelar = new JButton("Voltar");
 		btnCancelar.setForeground(new Color(128, 128, 0));
-		btnCancelar.setBackground(new Color(240,240,240));
+		btnCancelar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnCancelar.setBackground(UIManager.getColor("Button.background"));
+		btnCancelar.setBounds(359, 519, 172, 37);
 		contentPane.add(btnCancelar);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\editora.png"));
+		lblNewLabel.setBounds(393, 125, 263, 312);
+		contentPane.add(lblNewLabel);
 	}
 }

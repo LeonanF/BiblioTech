@@ -41,4 +41,48 @@ public class UsuarioDAO {
 			return false;
 		}
 	}
+	
+	
+	public ResultSet autenticacaoAluno(UsuarioDTO objusuariodto) {
+		conn = new ConnectionDB().getConnection();
+		
+		try {
+			String sql = "select * from usuario where email_usuario = ? and senha_usuario = ?";
+			
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm.setString(1, objusuariodto.getEmail_usuario());
+			pstm.setString(2, objusuariodto.getSenha_usuario());
+			
+			ResultSet rs = pstm.executeQuery();
+			
+			return rs;
+			
+		} catch (SQLException erro) {
+			JOptionPane.showMessageDialog(null, "erro no UsuarioDAO: "+ erro);
+			
+			return null;
+		}
+	}
+	
+	
+	public ResultSet autenticacaoBibliotecario(UsuarioDTO objusuariodto) {
+		conn = new ConnectionDB().getConnection();
+		
+		try {
+			String sql = "select * from usuariobibliotecario where usuario_bibliotecario = ? and senha_bibliotecario = ?";
+			
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm.setString(1, objusuariodto.getUsuario_bibliotecario());
+			pstm.setString(2, objusuariodto.getSenha_bibliotecario());
+			
+			ResultSet rs = pstm.executeQuery();
+			
+			return rs;
+			
+		} catch (SQLException erro) {
+			JOptionPane.showMessageDialog(null, "erro no UsuarioDAO: "+ erro);
+			
+			return null;
+		}
+	}
 }

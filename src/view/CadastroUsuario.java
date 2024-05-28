@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.EventQueue;
 import javax.swing.JPasswordField;
 
@@ -20,6 +22,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 public class CadastroUsuario extends JFrame {
 
@@ -59,9 +62,9 @@ public class CadastroUsuario extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Cadastro de Usuário");
+		JLabel lblNewLabel = new JLabel("CADASTRAR USUÁRIO");
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 30));
-		lblNewLabel.setBounds(212, 11, 285, 37);
+		lblNewLabel.setBounds(198, 11, 308, 47);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nome");
@@ -136,7 +139,7 @@ public class CadastroUsuario extends JFrame {
 		                if (objusuariodao.cadastrarUsuario(objusuariodto)) {
 		                    JOptionPane.showMessageDialog(btnCadastrar, "Cadastrado com Sucesso!");
 		                    dispose();
-		                    PaginaInicial objpaginainicial = new PaginaInicial();
+		                    Menu objpaginainicial = new Menu();
 		                    objpaginainicial.setVisible(true);
 		                } else {
 		                    JOptionPane.showMessageDialog(null, "Dados inseridos incorretamente. Tente novamente!");
@@ -147,14 +150,13 @@ public class CadastroUsuario extends JFrame {
 		        }
 			}
 		});
-		btnCadastrar.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnCadastrar.setBounds(244, 532, 126, 37);
-		contentPane.add(btnCadastrar);
 		
-		JButton btnVoltar = new JButton("Voltar");
-		btnVoltar.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnVoltar.setBounds(380, 532, 126, 37);
-		contentPane.add(btnVoltar);
+		
+		btnCadastrar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnCadastrar.setBounds(198, 532, 172, 37);
+		btnCadastrar.setForeground(new Color(128, 128, 0));
+		btnCadastrar.setBackground(new Color(240,240,240));
+		contentPane.add(btnCadastrar);
 		
 		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Matrícula");
 		lblNewLabel_1_1_1_1_1.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -165,5 +167,27 @@ public class CadastroUsuario extends JFrame {
 		txtMatricula.setColumns(10);
 		txtMatricula.setBounds(10, 450, 285, 20);
 		contentPane.add(txtMatricula);
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PaginaInicial objpaginainicial = new PaginaInicial();
+				objpaginainicial.setVisible(true);
+				
+				dispose();
+			}
+		});
+		btnVoltar.setForeground(new Color(128, 128, 0));
+		btnVoltar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnVoltar.setBackground(new Color(240,240,240));
+		btnVoltar.setBounds(380, 532, 172, 37);
+		contentPane.add(btnVoltar);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\cadastrar.png"));
+		lblNewLabel_2.setBounds(366, 155, 267, 273);
+		contentPane.add(lblNewLabel_2);
+		
+	
 	}
 }

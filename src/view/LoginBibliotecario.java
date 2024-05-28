@@ -1,13 +1,9 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import DAO.UsuarioDAO;
-import model.UsuarioDTO;
+import controller.UsuarioController;
 import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,7 +11,6 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
@@ -30,25 +25,6 @@ public class LoginBibliotecario extends JFrame {
 	private JTextField txtUsuario;
 	private JPasswordField txtSenha;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginBibliotecario frame = new LoginBibliotecario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public LoginBibliotecario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -112,31 +88,27 @@ public class LoginBibliotecario extends JFrame {
 		contentPane.add(btnVoltarAluno);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\login-bibliotecario.png"));
+		lblNewLabel.setIcon(new ImageIcon("./img/login-bibliotecario.png"));
 		lblNewLabel.setBounds(276, 83, 148, 116);
 		contentPane.add(lblNewLabel);
 	}
 	
 	
 	private void LogarBibliotecario() {
-		try {
+		
             String usuario_bibliotecario, senha_bibliotecario;
 
             usuario_bibliotecario = txtUsuario.getText();
             senha_bibliotecario = new String (txtSenha.getPassword());
 
-            // verifica se algum campo está vazio
+
             if (usuario_bibliotecario.isEmpty() || senha_bibliotecario.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos para fazer login.");
             } else {
-                UsuarioDTO objusuariodto = new UsuarioDTO();
-                objusuariodto.setUsuario_bibliotecario(usuario_bibliotecario);
-                objusuariodto.setSenha_bibliotecario(senha_bibliotecario);
 
-                UsuarioDAO objusuariodao = new UsuarioDAO();
-                ResultSet rsusuariodao = objusuariodao.autenticacaoBibliotecario(objusuariodto);
-
-                if (rsusuariodao.next()) {
+            	ResultSet rs = UsuarioController.autenticacaoBibliotecario(usuario_bibliotecario, senha_bibliotecario);
+            	
+                if (rs!=null) {
                     ConfigBibliotecario objconfigbibliotecario = new ConfigBibliotecario();
                     objconfigbibliotecario.setVisible(true);
                     dispose();
@@ -144,9 +116,6 @@ public class LoginBibliotecario extends JFrame {
                     JOptionPane.showMessageDialog(null, "Usuário ou Senha Inválidos");
                 }
             }
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro no LoginBliotecario: " + erro);
-        }
 
     }
 

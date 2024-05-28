@@ -14,16 +14,12 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 
 public class PaginaInicial extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -36,10 +32,6 @@ public class PaginaInicial extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 */
 	public PaginaInicial() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 700);
@@ -76,7 +68,7 @@ public class PaginaInicial extends JFrame {
 		contentPane.add(btnSouAluno);
 		
 		JLabel imagemLivro = new JLabel("");
-		imagemLivro.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\biblioteca.png"));
+		imagemLivro.setIcon(new ImageIcon("./img/biblioteca.png"));
 		imagemLivro.setBounds(-132, 181, 684, 506);
 		contentPane.add(imagemLivro);
 		
@@ -98,6 +90,7 @@ public class PaginaInicial extends JFrame {
 		btnSouBibliotecario.setFont(new Font("Arial", Font.PLAIN, 20));
 		btnSouBibliotecario.setBackground(new Color(240,240,240));
 		btnSouBibliotecario.setBounds(228, 243, 242, 61);
+		btnSouBibliotecario.setFocusPainted(false);
 		contentPane.add(btnSouBibliotecario);
 	}
 }

@@ -1,14 +1,13 @@
 package view;
 
 import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import DAO.UsuarioDAO;
-import model.UsuarioDTO;
+import controller.UsuarioController;
+import model.Usuario;
 import javax.swing.JPasswordField;
 
 import javax.swing.JLabel;
@@ -30,25 +29,6 @@ public class LoginAluno extends JFrame {
 	private JTextField txtEmail;
 	private JPasswordField txtSenha;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginAluno frame = new LoginAluno();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public LoginAluno() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -111,30 +91,27 @@ public class LoginAluno extends JFrame {
 		contentPane.add(btnVoltarAluno);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\login-aluno.png"));
+		lblNewLabel_2.setIcon(new ImageIcon("./img/login-aluno.png"));
 		lblNewLabel_2.setBounds(288, 84, 113, 116);
 		contentPane.add(lblNewLabel_2);
 	}
 	
 	private void LogarAluno() {
-		try {
+
             String email_usuario, senha_usuario;
 
             email_usuario = txtEmail.getText();
             senha_usuario = new String (txtSenha.getPassword());
 
-            // verifica se algum campo está vazio
+
             if (email_usuario.isEmpty() || senha_usuario.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos para fazer login.");
-            } else {
-                UsuarioDTO objusuariodto = new UsuarioDTO();
-                objusuariodto.setEmail_usuario(email_usuario);
-                objusuariodto.setSenha_usuario(senha_usuario);
+            } else 
+            {
 
-                UsuarioDAO objusuariodao = new UsuarioDAO();
-                ResultSet rsusuariodao = objusuariodao.autenticacaoAluno(objusuariodto);
-
-                if (rsusuariodao.next()) {
+            	ResultSet rs = UsuarioController.autenticacaoAluno(email_usuario, senha_usuario);
+            	
+                if (rs != null) {
                     ConfigAluno objconfigaluno = new ConfigAluno();
                     objconfigaluno.setVisible(true);
                     dispose();
@@ -142,9 +119,7 @@ public class LoginAluno extends JFrame {
                     JOptionPane.showMessageDialog(null, "E-mail ou Senha Inválidos");
                 }
             }
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro no LoginAluno: " + erro);
-        }
+        
 
     }
 }

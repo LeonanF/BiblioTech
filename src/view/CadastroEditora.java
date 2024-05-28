@@ -6,20 +6,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
-
-import controller.EditoraController;
-
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.text.ParseException;
-
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
 import javax.swing.ImageIcon;
 
@@ -106,7 +98,7 @@ public class CadastroEditora extends JFrame {
 		contentPane.add(btnCancelar);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\editora.png"));
+		lblNewLabel.setIcon(new ImageIcon("./img/editora.png"));
 		lblNewLabel.setBounds(393, 125, 263, 312);
 		contentPane.add(lblNewLabel);
 	}

@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -31,19 +30,6 @@ public class CadastroLivro extends JFrame {
 	private JTextField campoEdicao;
 	private JTextField campoAutor;
 	private JTextField campoISBN;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CadastroLivro frame = new CadastroLivro();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

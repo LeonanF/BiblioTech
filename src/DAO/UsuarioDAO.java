@@ -7,82 +7,92 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import model.UsuarioDTO;
+import model.Usuario;
 
 public class UsuarioDAO {
 	
-	Connection conn;
-	PreparedStatement pstm;
-	ResultSet rs;
 	
-	public boolean cadastrarUsuario(UsuarioDTO objusuariodto) {
+	public static boolean cadastrarUsuario(Usuario usuario) {
+		Connection conn;
+		ConnectionDB db = new ConnectionDB();
+		PreparedStatement pstm;
+		
+		boolean worked = false;
+		
 		String sql = "insert into usuario (nome_usuario, email_usuario, senha_usuario, curso_usuario, matricula_usuario) values (?, ?, ?, ?, ?)";
 		
-		conn = new ConnectionDB().getConnection();
+		conn = db.getConnection();
 		
 		try {
 			
 			pstm = conn.prepareStatement(sql);
-			pstm.setString(1, objusuariodto.getNome_usuario());
-			pstm.setString(2, objusuariodto.getEmail_usuario());
-			pstm.setString(3, objusuariodto.getSenha_usuario());
-			pstm.setString(4, objusuariodto.getCurso_usuario());
-			pstm.setInt(5, objusuariodto.getMatricula_usuario());
+			pstm.setString(1, usuario.getNome_usuario());
+			pstm.setString(2, usuario.getEmail_usuario());
+			pstm.setString(3, usuario.getSenha_usuario());
+			pstm.setString(4, usuario.getCurso_usuario());
+			pstm.setInt(5, usuario.getMatricula_usuario());
 			
 			
-			pstm.execute();
+			worked = pstm.executeUpdate()>0;
 			pstm.close();
 			
-			return true;
-			
-		} catch (SQLException erro) {
-			JOptionPane.showMessageDialog(null, "Erro no UsuarioDAO" + erro);
-			
-			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		db.closeConnection();
+		
+		return worked;
+		
 	}
 	
 	
-	public ResultSet autenticacaoAluno(UsuarioDTO objusuariodto) {
-		conn = new ConnectionDB().getConnection();
-		
+	public static ResultSet autenticacaoAluno(String email, String senha) {
+		Connection conn;
+		ConnectionDB db = new ConnectionDB();
+		conn = db.getConnection();
+		ResultSet rs = null;
+
 		try {
 			String sql = "select * from usuario where email_usuario = ? and senha_usuario = ?";
 			
 			PreparedStatement pstm = conn.prepareStatement(sql);
-			pstm.setString(1, objusuariodto.getEmail_usuario());
-			pstm.setString(2, objusuariodto.getSenha_usuario());
+			pstm.setString(1, email);
+			pstm.setString(2, senha);
 			
-			ResultSet rs = pstm.executeQuery();
-			
-			return rs;
-			
-		} catch (SQLException erro) {
-			JOptionPane.showMessageDialog(null, "erro no UsuarioDAO: "+ erro);
-			
-			return null;
+			rs = pstm.executeQuery();
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+	
+		db.closeConnection();
+		
+		return rs;
 	}
 	
 	
-	public ResultSet autenticacaoBibliotecario(UsuarioDTO objusuariodto) {
-		conn = new ConnectionDB().getConnection();
+	public static ResultSet autenticacaoBibliotecario(String login, String senha) {
+		Connection conn;
+		ConnectionDB db = new ConnectionDB();
+		conn = db.getConnection();
+		ResultSet rs = null;
 		
 		try {
 			String sql = "select * from usuariobibliotecario where usuario_bibliotecario = ? and senha_bibliotecario = ?";
 			
 			PreparedStatement pstm = conn.prepareStatement(sql);
-			pstm.setString(1, objusuariodto.getUsuario_bibliotecario());
-			pstm.setString(2, objusuariodto.getSenha_bibliotecario());
+			pstm.setString(1, login);
+			pstm.setString(2, senha);
 			
-			ResultSet rs = pstm.executeQuery();
+			rs = pstm.executeQuery();
 			
-			return rs;
-			
-		} catch (SQLException erro) {
-			JOptionPane.showMessageDialog(null, "erro no UsuarioDAO: "+ erro);
-			
-			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		db.closeConnection();
+		return rs;
+		
 	}
 }

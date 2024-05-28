@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.EventQueue;
 import javax.swing.JPasswordField;
 
 import javax.swing.JFrame;
@@ -10,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import DAO.UsuarioDAO;
-import model.UsuarioDTO;
+import model.Usuario;
 
 
 import javax.swing.JLabel;
@@ -22,9 +20,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 
-public class CadastroUsuario extends JFrame {
+class CadastroUsuario extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -34,25 +31,6 @@ public class CadastroUsuario extends JFrame {
 	private JTextField txtCurso;
 	private JTextField txtMatricula;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CadastroUsuario frame = new CadastroUsuario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public CadastroUsuario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 700);
@@ -122,21 +100,12 @@ public class CadastroUsuario extends JFrame {
 					matricula = txtMatricula.getText(); 
 					
 					
-					// verifica se algum campo está vazio
 		            if (nome.isEmpty() ||email.isEmpty() || senha.isEmpty() || curso.isEmpty() || matricula.isEmpty() ) {
 		                JOptionPane.showMessageDialog(btnCadastrar, "Por favor, preencha todos os campos para cadastrar.");
 		            } else {
-		                UsuarioDTO objusuariodto = new UsuarioDTO();
-		                objusuariodto.setNome_usuario(nome);
-		                objusuariodto.setEmail_usuario(email);
-		                objusuariodto.setSenha_usuario(senha);
-		                objusuariodto.setCurso_usuario(curso);
-		                objusuariodto.setMatricula_usuario(Integer.parseInt(matricula));
-		                
+		                Usuario usuario = new Usuario(Integer.parseInt(matricula), nome, senha, email, curso);
 
-		                UsuarioDAO objusuariodao = new UsuarioDAO();
-
-		                if (objusuariodao.cadastrarUsuario(objusuariodto)) {
+		               if (UsuarioDAO.cadastrarUsuario(usuario)) {
 		                    JOptionPane.showMessageDialog(btnCadastrar, "Cadastrado com Sucesso!");
 		                    dispose();
 		                    Menu objpaginainicial = new Menu();
@@ -184,7 +153,7 @@ public class CadastroUsuario extends JFrame {
 		contentPane.add(btnVoltar);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\leovi\\OneDrive\\Área de Trabalho\\projeto cornisse\\cadastrar.png"));
+		lblNewLabel_2.setIcon(new ImageIcon("./img/cadastrar.png"));
 		lblNewLabel_2.setBounds(366, 155, 267, 273);
 		contentPane.add(lblNewLabel_2);
 		

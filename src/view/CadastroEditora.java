@@ -6,8 +6,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
+
+import controller.EditoraController;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -84,6 +91,22 @@ public class CadastroEditora extends JFrame {
 		contentPane.add(emailTitle);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(campoNome.getText().isBlank())
+				{
+					JOptionPane.showMessageDialog(contentPane, "O campo Nome deve ser preenchido.", "Alerta", JOptionPane.WARNING_MESSAGE);
+				    return;
+				}
+				if(EditoraController.cadastrarEditora(campoNome.getText(), campoEndereco.getText(), campoTelefone.getText(), campoEmail.getText())) {
+					JOptionPane.showMessageDialog(contentPane, "Editora cadastrada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+			}
+		});
 		btnCadastrar.setForeground(new Color(128, 128, 0));
 		btnCadastrar.setFont(new Font("Arial", Font.PLAIN, 15));
 		btnCadastrar.setBackground(UIManager.getColor("Button.background"));
@@ -91,6 +114,11 @@ public class CadastroEditora extends JFrame {
 		contentPane.add(btnCadastrar);
 		
 		JButton btnCancelar = new JButton("Voltar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnCancelar.setForeground(new Color(128, 128, 0));
 		btnCancelar.setFont(new Font("Arial", Font.PLAIN, 15));
 		btnCancelar.setBackground(UIManager.getColor("Button.background"));

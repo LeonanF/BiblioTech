@@ -37,9 +37,9 @@ public class ConfigAluno extends JFrame {
 	private JTextField isbnLivro;
 	private JTable table;
 	private String selectedIsbn = "";
+	private int selectedId;
 	@SuppressWarnings("unused")
 	private final String matricula;
-	private JTextField matriculaField;
 	private JTable table_1;
 
 
@@ -230,55 +230,7 @@ public class ConfigAluno extends JFrame {
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
 		lblNewLabel.setBounds(109, 11, 427, 35);
 		panel_1.add(lblNewLabel);
-		
-		JLabel lblNewLabel_2_3 = new JLabel("Matrícula");
-		lblNewLabel_2_3.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblNewLabel_2_3.setBounds(287, 84, 68, 14);
-		panel_1.add(lblNewLabel_2_3);
-		
-		matriculaField = new JTextField();
-		matriculaField.setColumns(10);
-		matriculaField.setBounds(185, 109, 268, 20);
-		panel_1.add(matriculaField);
-		
-		
-		
-		JButton btnVerificar = new JButton("Verificar");
-		btnVerificar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String matricula = matriculaField.getText().trim();
-                if (!matricula.isEmpty()) {
-                    List<Emprestimo> emprestimos = EmprestimoController.buscarEmprestimosPorMatricula(matricula);
-                    DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-                    model.setRowCount(0); 
-                    for (Emprestimo emprestimo : emprestimos) {
-                        model.addRow(new Object[]{
-                            emprestimo.getId(),
-                            emprestimo.getIsbn(),
-                            emprestimo.getMatricula(),
-                            emprestimo.getDataEmprestimo(),
-                            emprestimo.getDataDevolucaoEstimada(),
-                            emprestimo.getStatusEmprestimo()
-                        });
-                    }
-                    if (emprestimos.isEmpty()) {
-                        JOptionPane.showMessageDialog(contentPane, "Nenhum empréstimo encontrado para a matrícula informada.", "Informação", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(contentPane, "Por favor, informe uma matrícula.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-                
-                matriculaField.setText("");
-            }
-			}
-		);
-		btnVerificar.setForeground(new Color(128, 128, 0));
-		btnVerificar.setFont(new Font("Arial", Font.PLAIN, 12));
-		btnVerificar.setFocusPainted(false);
-		btnVerificar.setBackground(new Color(240,240,240));
-		btnVerificar.setBounds(185, 160, 105, 23);
-		panel_1.add(btnVerificar);
-		
+
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 217, 639, 310);
 		panel_1.add(scrollPane_1);
@@ -300,17 +252,39 @@ public class ConfigAluno extends JFrame {
 			}
 		});
 		
-		JButton btnRenovar = new JButton("Renovar");
-		btnRenovar.setForeground(new Color(128, 128, 0));
-		btnRenovar.setFont(new Font("Arial", Font.PLAIN, 12));
-		btnRenovar.setFocusPainted(false);
-		btnRenovar.setBackground(UIManager.getColor("Button.background"));
-		btnRenovar.setBounds(348, 160, 105, 23);
-		panel_1.add(btnRenovar);
+		preencherTabelaEmprestimo();		
 
 		table_1.getColumnModel().getColumn(3).setPreferredWidth(98);
 		table_1.getColumnModel().getColumn(4).setPreferredWidth(140);
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(116);
+		table_1.getSelectionModel().addListSelectionListener((ListSelectionListener) new ListSelectionListener() {
+		    @Override
+		    public void valueChanged(ListSelectionEvent e) {
+		        if (!e.getValueIsAdjusting() && table_1.getSelectedRow() != -1 && table_1.getSelectedColumn() != -1) {
+		
+		            Object id = table_1.getValueAt(table_1.getSelectedRow(), 0);
+		            selectedId = (int) id;
+		        }
+		    }
+		});
+		
+		JButton btnRenovar = new JButton("Renovar");
+		btnRenovar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(EmprestimoController.renovarEmprestimo(selectedId)) {
+					JOptionPane.showMessageDialog(contentPane, "Empréstimo renovado com sucesso.", "Informação", JOptionPane.INFORMATION_MESSAGE);
+					preencherTabelaEmprestimo();
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "Não foi possível renovar o empréstimo.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		btnRenovar.setForeground(new Color(128, 128, 0));
+		btnRenovar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnRenovar.setFocusPainted(false);
+		btnRenovar.setBackground(new Color(240,240,240));
+		btnRenovar.setBounds(280, 162, 105, 23);
+        panel_1.add(btnRenovar);
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBackground(SystemColor.controlHighlight);
@@ -340,4 +314,23 @@ public class ConfigAluno extends JFrame {
 		generoLivro.setText("");
 		isbnLivro.setText("");
 	}
+
+	private void preencherTabelaEmprestimo() {
+		if (!matricula.isEmpty()) {
+	        List<Emprestimo> emprestimos = EmprestimoController.buscarEmprestimosPorMatricula(matricula);
+	        DefaultTableModel modelEmprestimo = (DefaultTableModel) table_1.getModel();
+	        modelEmprestimo.setRowCount(0); 
+	        for (Emprestimo emprestimo : emprestimos) {
+	        	modelEmprestimo.addRow(new Object[]{
+	                emprestimo.getId(),
+	                emprestimo.getIsbn(),
+	                emprestimo.getMatricula(),
+	                emprestimo.getDataEmprestimo(),
+	                emprestimo.getDataDevolucaoEstimada(),
+	                emprestimo.getStatusEmprestimo()
+	            });
+	        }
+	    }
+}
+	
 }

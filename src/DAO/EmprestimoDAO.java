@@ -1,5 +1,6 @@
 package DAO;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -90,33 +91,18 @@ public class EmprestimoDAO {
 
 
 
-	public static boolean renovarEmprestimo(String isbn, String matricula) {
+	public static boolean renovarEmprestimo(int id) {
 	    boolean worked = false;
 	    ConnectionDB db = new ConnectionDB(); 
 	    Connection conn = db.getConnection();
 	        
 	    try {
-	        String querySelect = "SELECT DATA_DEVOLUCAO_ESTIMADA FROM EMPRESTIMOS WHERE ISBN = ? AND MATRICULA = ?";
-	        PreparedStatement psSelect = conn.prepareStatement(querySelect);
-	        psSelect.setString(1, isbn);
-	        psSelect.setString(2, matricula);
-	        ResultSet rs = psSelect.executeQuery();
-	        
-	        if (rs.next()) {
-	            Timestamp dataEstimada = rs.getTimestamp("DATA_DEVOLUCAO_ESTIMADA");
-	            Calendar calendar = Calendar.getInstance();
-	            calendar.setTimeInMillis(dataEstimada.getTime());
-	            calendar.add(Calendar.DAY_OF_MONTH, 7);
+	        String callProcedure = "CALL Adicionar7DiasDataDevolucao(?)";
+	        CallableStatement cs = conn.prepareCall(callProcedure);
+	        cs.setInt(1, id);
+	        cs.execute();
 	            
-	            String queryUpdate = "UPDATE EMPRESTIMOS SET DATA_DEVOLUCAO_ESTIMADA = ? WHERE ISBN = ? AND MATRICULA = ?";
-	            PreparedStatement psUpdate = conn.prepareStatement(queryUpdate);
-	            psUpdate.setTimestamp(1, new Timestamp(calendar.getTimeInMillis()));
-	            psUpdate.setString(2, isbn);
-	            psUpdate.setString(3, matricula);
-	            
-	            worked = psUpdate.executeUpdate() > 0;
-	        }
-	            
+	        worked = true;
 	    } catch(SQLException e) {
 	        e.printStackTrace();
 	    }

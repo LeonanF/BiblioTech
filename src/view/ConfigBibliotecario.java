@@ -359,9 +359,9 @@ public class ConfigBibliotecario extends JFrame {
 		panel_3.setBackground(SystemColor.controlHighlight);
 		tabbedPane.addTab("Atualizar Livros", null, panel_3, null);
 		
-		JLabel lblNewLabel = new JLabel("PAINEL DE CONTROLE");
+		JLabel lblNewLabel = new JLabel("PAINEL DE CONTROLE(ADM)");
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 28));
-		lblNewLabel.setBounds(195, 11, 291, 35);
+		lblNewLabel.setBounds(173, 11, 369, 35);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnDeslogar = new JButton("Deslogar");

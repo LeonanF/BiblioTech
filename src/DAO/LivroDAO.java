@@ -2,8 +2,12 @@ package DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import model.Editora;
 import model.Livro;
 
 public class LivroDAO {
@@ -30,4 +34,47 @@ public class LivroDAO {
 		return worked;
 		
 	}
+	
+	public static List<Livro> consultarLivros(String titulo, String autor, String genero, String isbn) {
+        List<Livro> livros = new ArrayList<>();
+        ConnectionDB db = new ConnectionDB(); 
+        Connection conn = db.getConnection();
+        
+        try {
+            String query = "SELECT * FROM LIVROS WHERE (nome LIKE ? OR ? IS NULL) AND (autor LIKE ? OR ? IS NULL) AND (genero LIKE ? OR ? IS NULL) AND (isbn LIKE ? OR ? IS NULL)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, titulo != null ? "%" + titulo + "%" : null);
+            ps.setString(2, titulo);
+            ps.setString(3, autor != null ? "%" + autor + "%" : null);
+            ps.setString(4, autor);
+            ps.setString(5, genero != null ? "%" + genero + "%" : null);
+            ps.setString(6, genero);
+            ps.setString(7, isbn != null ? "%" + isbn + "%" : null);
+            ps.setString(8, isbn);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                String nomeEditora = rs.getString("editora");
+                Editora editora = EditoraDAO.buscarEditora(nomeEditora);
+                
+                if (editora != null) {
+                    Livro livro = new Livro(
+                        rs.getString("nome"), 
+                        editora, 
+                        rs.getString("autor"), 
+                        rs.getInt("edicao"), 
+                        rs.getString("genero"), 
+                        rs.getString("isbn")
+                    );
+                    livros.add(livro);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        db.closeConnection();
+        return livros;
+    }
 }

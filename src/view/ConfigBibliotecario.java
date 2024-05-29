@@ -655,6 +655,11 @@ public class ConfigBibliotecario extends JFrame {
 		matriculaDevolucao.setBounds(10, 225, 130, 14);
 		painelDevolucao.add(matriculaDevolucao);
 		
+		JLabel lblNewLabel_6 = new JLabel("New label");
+		lblNewLabel_6.setIcon(new ImageIcon("./img/devolver_livro.png"));
+		lblNewLabel_6.setBounds(337, 101, 271, 264);
+		painelDevolucao.add(lblNewLabel_6);
+		
 		JButton btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

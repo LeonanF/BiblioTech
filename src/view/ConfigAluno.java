@@ -213,10 +213,6 @@ public class ConfigAluno extends JFrame {
 		panel.add(btnReservar);
 		table.getColumnModel().getColumn(5).setPreferredWidth(85);
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(SystemColor.controlHighlight);
-		tabbedPane.addTab("Emprestar Livros", null, panel_2, null);
-		panel_2.setLayout(null);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(SystemColor.controlHighlight);

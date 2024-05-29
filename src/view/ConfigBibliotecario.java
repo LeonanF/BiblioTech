@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.SystemColor;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 
 
@@ -63,6 +64,9 @@ public class ConfigBibliotecario extends JFrame {
 	private JTextField autorAtualizar;
 	private JTextField editoraAtualizar;
 	private JTextField edicaoAtualizar;
+	private JComboBox generoBox;
+	private JTextField campoIsbnDevolucao;
+	private JTextField campoMatriculaDevolucao;
 
 	public ConfigBibliotecario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -152,6 +156,7 @@ public class ConfigBibliotecario extends JFrame {
 					matricula = txtMatricula.getText(); 
 					
 					
+					
 		            if (nome.isEmpty() ||email.isEmpty() || senha.isEmpty() || curso.isEmpty() || matricula.isEmpty() ) {
 		            	JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos.", "Alerta", JOptionPane.WARNING_MESSAGE);
 		            } else {
@@ -159,6 +164,7 @@ public class ConfigBibliotecario extends JFrame {
 
 		               if (UsuarioController.cadastrarUsuario(usuario)) {
 		            	   JOptionPane.showMessageDialog(contentPane, "Aluno cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+		            	   limparCamposUsuario();
 		                } else {
 		                	JOptionPane.showMessageDialog(contentPane, "Dados inseridos incorretamente. Tente novamente!", "Alerta", JOptionPane.WARNING_MESSAGE);
 		                }
@@ -226,7 +232,7 @@ public class ConfigBibliotecario extends JFrame {
 		lblNewLabel_2_1_3_1_1.setBounds(10, 237, 59, 14);
 		panel_1.add(lblNewLabel_2_1_3_1_1);
 		
-		JComboBox<?> generoBox = new JComboBox();
+		generoBox = new JComboBox();
 		generoBox.setModel(new DefaultComboBoxModel(new String[] {"", "Ação", "Aventura", "Romance", "Fantasia", "Literatura clássica", "Autoajuda", "Ciência de Dados"}));
 		generoBox.setSelectedIndex(0);
 		generoBox.setBounds(10, 262, 285, 25);
@@ -269,10 +275,14 @@ public class ConfigBibliotecario extends JFrame {
 				
 				if(LivroController.cadastrarLivro(nomeLivro.getText(), autorLivro.getText(), (String) generoBox.getSelectedItem(), isbnLivro.getText(), Integer.parseInt(edicaoLivro.getText()), editora)) {
 					JOptionPane.showMessageDialog(contentPane, "Livro cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+					limparCamposLivro();
 				} else {
 					JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				
+
+				
 			}
 		});
 		btnCadastrarLivro.setForeground(new Color(128, 128, 0));
@@ -348,9 +358,10 @@ public class ConfigBibliotecario extends JFrame {
 				    JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos.", "Alerta", JOptionPane.WARNING_MESSAGE);
 				    return;
 				}
-
+				
 				if (EditoraController.cadastrarEditora(campoNome.getText(), campoEndereco.getText(), campoTelefone.getText(), campoEmail.getText())) {
 				    JOptionPane.showMessageDialog(contentPane, "Editora cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+				    limparDadosEditora();
 				} else {
 				    JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
 				}}
@@ -561,9 +572,11 @@ public class ConfigBibliotecario extends JFrame {
 		            return;
 				}
 				
+				
 				if(LivroDAO.verificarDisponibilidade(campoIsbn.getText()).equals("Disponível")) {
 					if(EmprestimoController.fazerEmprestimo(campoIsbn.getText(), campoMatricula.getText())) {
 			            JOptionPane.showMessageDialog(contentPane, "Empréstimo feito com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			            limparDadosEmprestimo();
 					} else {
 						JOptionPane.showMessageDialog(contentPane, "Erro ao fazer empréstimo, por favor verifique os dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -584,6 +597,62 @@ public class ConfigBibliotecario extends JFrame {
 		lblNewLabel_5.setBounds(360, 88, 271, 280);
 		painelEmprestimo.add(lblNewLabel_5);
 		
+
+		Panel painelDevolucao =  new Panel();
+		painelDevolucao.setBackground(SystemColor.controlHighlight);
+		tabbedPane.addTab("Devolver livro", null, painelDevolucao, null);
+		painelDevolucao.setLayout(null);
+		
+		JLabel titleDevolucao = new JLabel("DEVOLVER LIVRO AO ACERVO");
+		titleDevolucao.setHorizontalAlignment(SwingConstants.CENTER);
+		titleDevolucao.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		titleDevolucao.setBounds(180, 11, 310, 25);
+		painelDevolucao.add(titleDevolucao);
+		
+		JLabel isbnDevolucao = new JLabel("ISBN");
+		isbnDevolucao.setFont(new Font("Arial", Font.PLAIN, 15));
+		isbnDevolucao.setBounds(10, 149, 33, 14);
+		painelDevolucao.add(isbnDevolucao);
+		
+		campoIsbnDevolucao = new JTextField();
+		campoIsbnDevolucao.setColumns(10);
+		campoIsbnDevolucao.setBounds(10, 169, 285, 20);
+		painelDevolucao.add(campoIsbnDevolucao);
+		
+		campoMatriculaDevolucao = new JTextField();
+		campoMatriculaDevolucao.setColumns(10);
+		campoMatriculaDevolucao.setBounds(10, 250, 285, 20);
+		painelDevolucao.add(campoMatriculaDevolucao);
+		
+		JButton btnDevolverLivro = new JButton("Devolver livro");
+		btnDevolverLivro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(campoIsbnDevolucao.getText().isBlank() || campoMatriculaDevolucao.getText().isBlank()) {
+		            JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos", "Erro", JOptionPane.INFORMATION_MESSAGE);
+		            return;
+				}
+				
+				if(EmprestimoController.devolverLivro(campoIsbnDevolucao.getText(), campoMatriculaDevolucao.getText())) {
+					 JOptionPane.showMessageDialog(contentPane, "Devolução feita com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			            limparDadosDevolucao();
+			} else {
+				JOptionPane.showMessageDialog(contentPane, "Erro ao devolver livro, por favor verifique os dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+			}
+			}
+		});
+		btnDevolverLivro.setForeground(new Color(128, 128, 0));
+		btnDevolverLivro.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnDevolverLivro.setFocusPainted(false);
+		btnDevolverLivro.setBackground(UIManager.getColor("Button.background"));
+		btnDevolverLivro.setBounds(242, 382, 160, 31);
+		painelDevolucao.add(btnDevolverLivro);
+		
+		JLabel matriculaDevolucao = new JLabel("Matrícula do Aluno");
+		matriculaDevolucao.setFont(new Font("Arial", Font.PLAIN, 15));
+		matriculaDevolucao.setBounds(10, 225, 130, 14);
+		painelDevolucao.add(matriculaDevolucao);
+		
 		JButton btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -599,5 +668,41 @@ public class ConfigBibliotecario extends JFrame {
 		btnDeslogar.setBackground(new Color(240,240,240));
 		btnDeslogar.setFocusPainted(false);
 		contentPane.add(btnDeslogar);
+	}
+	
+	private void limparCamposUsuario() {
+		txtNome.setText("");
+		txtEmail.setText("");
+		txtSenha.setText("");
+		txtCurso.setText("");
+		txtMatricula.setText("");
+	}
+	
+
+	private void limparCamposLivro() {
+		nomeLivro.setText("");
+		autorLivro.setText("");
+		generoBox.setSelectedIndex(0);
+		isbnLivro.setText("");
+		edicaoLivro.setText("");
+		editoraLivro.setText("");
+	}
+	
+	private void limparDadosEditora() {
+		campoNome.setText("");
+		campoEndereco.setText("");
+		campoTelefone.setText("");
+		campoEmail.setText("");
+	}
+	
+
+	private void limparDadosEmprestimo() {
+		campoIsbn.setText("");
+		campoMatricula.setText("");
+	}
+
+	private void limparDadosDevolucao() {
+		campoMatriculaDevolucao.setText("");
+		campoIsbnDevolucao.setText("");
 	}
 }

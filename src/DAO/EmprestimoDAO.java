@@ -25,4 +25,26 @@ public class EmprestimoDAO {
 		
 		return worked;
 	}
+	
+	public static boolean devolverLivro(String isbn, String matricula) {
+	    boolean worked = false;
+	    ConnectionDB db = new ConnectionDB(); 
+	    Connection conn = db.getConnection();
+	        
+	    try {
+	        String query = "UPDATE EMPRESTIMOS SET STATUS_EMPRESTIMO = 'DEVOLVIDO' WHERE ISBN = ? AND MATRICULA = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, isbn);
+	        ps.setString(2, matricula);
+	            
+	        worked = ps.executeUpdate() > 0;
+	            
+	    } catch(SQLException e) {
+	        e.printStackTrace();
+	    }
+	        
+	    return worked;
+	}
+
+
 }

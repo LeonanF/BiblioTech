@@ -647,7 +647,6 @@ public class ConfigBibliotecario extends JFrame {
 		btnDevolverLivro.setFont(new Font("Arial", Font.PLAIN, 15));
 		btnDevolverLivro.setBackground(new Color(240,240,240));
 		btnDevolverLivro.setFocusPainted(false);
-		btnDevolverLivro.setBackground(UIManager.getColor("Button.background"));
 		btnDevolverLivro.setBounds(242, 382, 160, 31);
 		painelDevolucao.add(btnDevolverLivro);
 		

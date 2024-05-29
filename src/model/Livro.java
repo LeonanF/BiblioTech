@@ -7,8 +7,10 @@ public class Livro {
 	private int edicao;
 	private String genero;
 	private String isbn;
+	private String disponibilidade;
+	private int reservas;
 	
-	public Livro(String nome, Editora editora, String autor, int edicao, String genero, String isbn) {
+	public Livro(String nome, Editora editora, String autor, int edicao, String genero, String isbn, String disponibilidade, int reservas) {
 		super();
 		this.nome = nome;
 		this.editora = editora;
@@ -16,6 +18,8 @@ public class Livro {
 		this.edicao = edicao;
 		this.genero = genero;
 		this.isbn = isbn;
+		this.disponibilidade = disponibilidade;
+		this.reservas = reservas;
 	}
 
 	public String getNome() {
@@ -41,7 +45,14 @@ public class Livro {
 	public String getISBN() {
 		return isbn;
 	}
+
+	public String getDisponibilidade() {
+		return disponibilidade;
+	}
 	
+	public int getReservas() {
+		return reservas;
+	}
 	
 	
 }

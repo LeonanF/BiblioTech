@@ -3,6 +3,8 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
@@ -31,9 +33,12 @@ public class ConfigAluno extends JFrame {
 	private JTextField generoLivro;
 	private JTextField isbnLivro;
 	private JTable table;
+	private String selectedIsbn = "";
+	private final String matricula;
 
 
-	public ConfigAluno() {
+	public ConfigAluno(String matricula) {
+		this.matricula = matricula;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 700);
 		contentPane = new JPanel();
@@ -100,7 +105,30 @@ public class ConfigAluno extends JFrame {
 		isbnLivro.setColumns(10);
 		isbnLivro.setBounds(400, 164, 150, 20);
 		panel.add(isbnLivro);
+
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 247, 639, 251);
+		panel.add(scrollPane);
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Nome", "Autor", "G\u00EAnero", "ISBN", "Editora", "Disponibilidade", "Reservas"
+			}
+		) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			
+		});
 		
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -129,7 +157,6 @@ public class ConfigAluno extends JFrame {
                 }
 
                
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
                 
                 model.setRowCount(0); 
 
@@ -140,7 +167,8 @@ public class ConfigAluno extends JFrame {
                         livro.getGenero(),
                         livro.getISBN(),
                         livro.getEditora().getNome(),
-                        "Disponível" 
+                        livro.getDisponibilidade(),
+                        livro.getReservas()
                     });
                     
                     limparCampo();
@@ -153,31 +181,28 @@ public class ConfigAluno extends JFrame {
 		btnConsultar.setBounds(274, 213, 105, 23);
 		panel.add(btnConsultar);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 247, 639, 251);
-		panel.add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Nome", "Autor", "G\u00EAnero", "ISBN", "Editora", "Disponibilidade"
-			}
-		) {
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-			
+		
+		table.getSelectionModel().addListSelectionListener((ListSelectionListener) new ListSelectionListener() {
+		    @Override
+		    public void valueChanged(ListSelectionEvent e) {
+		        if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1 && table.getSelectedColumn() != -1) {
+		
+		            Object isbn = table.getValueAt(table.getSelectedRow(), model.findColumn("ISBN"));
+		            selectedIsbn = (String) isbn;
+		        }
+		    }
 		});
 		
 		JButton btnReservar = new JButton("Reservar");
 		btnReservar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(LivroController.reservarLivro(selectedIsbn, matricula)) {
+					JOptionPane.showMessageDialog(contentPane, "Reserva feita com sucesso!", "Informação", JOptionPane.INFORMATION_MESSAGE);
+				} else{
+					JOptionPane.showMessageDialog(contentPane, "Você já tem reserva para esse livro.", "Informação", JOptionPane.INFORMATION_MESSAGE);
+				};
+                model.setRowCount(0); 
 			}
 		});
 		btnReservar.setForeground(new Color(128, 128, 0));

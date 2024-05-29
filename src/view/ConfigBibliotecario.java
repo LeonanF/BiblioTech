@@ -647,7 +647,7 @@ public class ConfigBibliotecario extends JFrame {
 		btnDevolverLivro.setFont(new Font("Arial", Font.PLAIN, 15));
 		btnDevolverLivro.setBackground(new Color(240,240,240));
 		btnDevolverLivro.setFocusPainted(false);
-		btnDevolverLivro.setBackground(UIManager.getColor("Button.background"));
+		btnDevolverLivro.setBackground(new Color(240,240,240));
 		btnDevolverLivro.setBounds(242, 382, 160, 31);
 		painelDevolucao.add(btnDevolverLivro);
 		
@@ -655,6 +655,11 @@ public class ConfigBibliotecario extends JFrame {
 		matriculaDevolucao.setFont(new Font("Arial", Font.PLAIN, 15));
 		matriculaDevolucao.setBounds(10, 225, 130, 14);
 		painelDevolucao.add(matriculaDevolucao);
+		
+		JLabel lblNewLabel_6 = new JLabel("New label");
+		lblNewLabel_6.setIcon(new ImageIcon("./img/devolver_livro.png"));
+		lblNewLabel_6.setBounds(337, 101, 271, 264);
+		painelDevolucao.add(lblNewLabel_6);
 		
 		JButton btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {

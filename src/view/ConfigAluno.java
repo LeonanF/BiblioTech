@@ -246,6 +246,8 @@ public class ConfigAluno extends JFrame {
 		matriculaField.setBounds(185, 109, 268, 20);
 		panel_1.add(matriculaField);
 		
+		
+		
 		JButton btnVerificar = new JButton("Verificar");
 		btnVerificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -294,7 +296,14 @@ public class ConfigAluno extends JFrame {
 			new String[] {
 				"ID", "ISBN", "Matricula", "Data_Emprestimo", "Data_Devolucao_Estimada", "Status_Emprestimo"
 			}
-		));
+		) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
 		table_1.getColumnModel().getColumn(3).setPreferredWidth(98);
 		table_1.getColumnModel().getColumn(4).setPreferredWidth(140);
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(116);

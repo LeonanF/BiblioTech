@@ -15,8 +15,18 @@ public class LivroController {
         return LivroDAO.consultarLivros( titulo, autor, genero, isbn);
     }
 	
+
+	 public static Livro buscarLivroPorISBN(String isbn) {
+	        return LivroDAO.buscarLivroPorISBN(isbn);
+	    }
+	
+	 public static boolean atualizarLivro(String isbnOriginal, Livro livroAtualizado) {
+	        return LivroDAO.atualizarLivro(isbnOriginal, livroAtualizado);
+	    }
+
 	public static boolean reservarLivro(String isbn, String matricula) {
 		return LivroDAO.reservarLivro(isbn, matricula);
 	}
 	
+
 }

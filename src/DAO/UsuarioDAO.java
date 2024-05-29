@@ -89,4 +89,8 @@ public class UsuarioDAO {
 		return rs;
 		
 	}
+	
+	public static boolean buscarUsuario() {
+		return true;
+	}	
 }

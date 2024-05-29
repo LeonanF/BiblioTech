@@ -5,11 +5,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
-import DAO.EditoraDAO;
-import DAO.UsuarioDAO;
+import DAO.LivroDAO;
 import controller.EditoraController;
+import controller.EmprestimoController;
 import controller.LivroController;
+import controller.UsuarioController;
 import model.Editora;
+import model.Livro;
 import model.Usuario;
 
 import java.awt.Panel;
@@ -30,6 +32,10 @@ import java.text.ParseException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.SystemColor;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
+
 
 
 public class ConfigBibliotecario extends JFrame {
@@ -51,8 +57,17 @@ public class ConfigBibliotecario extends JFrame {
 	
 	private JTextField edicaoLivro;
 	private JTextField isbnLivro;
+	private JTextField campoIsbn;
+	private JTextField campoMatricula;
+	private JTextField isbnAtualizar;
+	private JTextField nomeAtualizar;
+	private JTextField autorAtualizar;
+	private JTextField editoraAtualizar;
+	private JTextField edicaoAtualizar;
+	private JComboBox generoBox;
+	private JTextField campoIsbnDevolucao;
+	private JTextField campoMatriculaDevolucao;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigBibliotecario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 700);
@@ -141,13 +156,15 @@ public class ConfigBibliotecario extends JFrame {
 					matricula = txtMatricula.getText(); 
 					
 					
+					
 		            if (nome.isEmpty() ||email.isEmpty() || senha.isEmpty() || curso.isEmpty() || matricula.isEmpty() ) {
 		            	JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos.", "Alerta", JOptionPane.WARNING_MESSAGE);
 		            } else {
 		                Usuario usuario = new Usuario(Integer.parseInt(matricula), nome, senha, email, curso);
 
-		               if (UsuarioDAO.cadastrarUsuario(usuario)) {
+		               if (UsuarioController.cadastrarUsuario(usuario)) {
 		            	   JOptionPane.showMessageDialog(contentPane, "Aluno cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+		            	   limparCamposUsuario();
 		                } else {
 		                	JOptionPane.showMessageDialog(contentPane, "Dados inseridos incorretamente. Tente novamente!", "Alerta", JOptionPane.WARNING_MESSAGE);
 		                }
@@ -157,6 +174,8 @@ public class ConfigBibliotecario extends JFrame {
 		        }
 				
 			}
+			
+		
 		});
 		btnCadastrarAluno.setForeground(new Color(128, 128, 0));
 		btnCadastrarAluno.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -215,7 +234,7 @@ public class ConfigBibliotecario extends JFrame {
 		lblNewLabel_2_1_3_1_1.setBounds(10, 237, 59, 14);
 		panel_1.add(lblNewLabel_2_1_3_1_1);
 		
-		JComboBox<?> generoBox = new JComboBox();
+		generoBox = new JComboBox();
 		generoBox.setModel(new DefaultComboBoxModel(new String[] {"", "Ação", "Aventura", "Romance", "Fantasia", "Literatura clássica", "Autoajuda", "Ciência de Dados"}));
 		generoBox.setSelectedIndex(0);
 		generoBox.setBounds(10, 262, 285, 25);
@@ -250,7 +269,7 @@ public class ConfigBibliotecario extends JFrame {
 				    return;
 				}
 				
-				Editora editora = EditoraDAO.buscarEditora(editoraLivro.getText());
+				Editora editora = EditoraController.buscarEditora(editoraLivro.getText());
 				if(editora==null) {
 					JOptionPane.showMessageDialog(contentPane, "Cadastre a editora primeiro!", "Alerta", JOptionPane.WARNING_MESSAGE);
 					return;
@@ -258,10 +277,14 @@ public class ConfigBibliotecario extends JFrame {
 				
 				if(LivroController.cadastrarLivro(nomeLivro.getText(), autorLivro.getText(), (String) generoBox.getSelectedItem(), isbnLivro.getText(), Integer.parseInt(edicaoLivro.getText()), editora)) {
 					JOptionPane.showMessageDialog(contentPane, "Livro cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+					limparCamposLivro();
 				} else {
 					JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				
+
+				
 			}
 		});
 		btnCadastrarLivro.setForeground(new Color(128, 128, 0));
@@ -337,9 +360,10 @@ public class ConfigBibliotecario extends JFrame {
 				    JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos.", "Alerta", JOptionPane.WARNING_MESSAGE);
 				    return;
 				}
-
+				
 				if (EditoraController.cadastrarEditora(campoNome.getText(), campoEndereco.getText(), campoTelefone.getText(), campoEmail.getText())) {
 				    JOptionPane.showMessageDialog(contentPane, "Editora cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+				    limparDadosEditora();
 				} else {
 				    JOptionPane.showMessageDialog(contentPane, "Erro ao adicionar ao banco de dados. Verifique os dados para evitar duplicata.", "Alerta", JOptionPane.WARNING_MESSAGE);
 				}}
@@ -359,11 +383,277 @@ public class ConfigBibliotecario extends JFrame {
 		Panel panel_3 = new Panel();
 		panel_3.setBackground(SystemColor.controlHighlight);
 		tabbedPane.addTab("Atualizar Livros", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("ATUALIZAR OS DADOS DO LIVRO");
+		lblNewLabel_1_2.setBounds(186, 11, 299, 25);
+		lblNewLabel_1_2.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		panel_3.add(lblNewLabel_1_2);
+		
+		JLabel lblNewLabel_2_5 = new JLabel("ISBN");
+		lblNewLabel_2_5.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_5.setBounds(318, 63, 38, 14);
+		panel_3.add(lblNewLabel_2_5);
+		
+		isbnAtualizar = new JTextField();
+		isbnAtualizar.setColumns(10);
+		isbnAtualizar.setBounds(212, 88, 252, 20);
+		panel_3.add(isbnAtualizar);
+		
+		@SuppressWarnings("rawtypes")
+		JComboBox <?> generoBoxAtualizar = new JComboBox();
+		generoBoxAtualizar.setModel(new DefaultComboBoxModel(new String[] {"", "Ação", "Aventura", "Romance", "Fantasia", "Literatura clássica", "Autoajuda", "Ciência de Dados"}));
+		generoBoxAtualizar.setSelectedIndex(0);
+		generoBoxAtualizar.setBounds(364, 212, 285, 25);
+		panel_3.add(generoBoxAtualizar);
+		
+		JButton btnCarregar = new JButton("Carregar");
+		btnCarregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String isbn = isbnAtualizar.getText().trim();
+                if (isbn.isEmpty()) {
+                    JOptionPane.showMessageDialog(contentPane, "Digite um ISBN para carregar.", "Alerta", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                Livro livro = LivroController.buscarLivroPorISBN(isbn);
+                if (livro == null) {
+                    JOptionPane.showMessageDialog(contentPane, "Livro não encontrado.", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+                nomeAtualizar.setText(livro.getNome());
+                autorAtualizar.setText(livro.getAutor());
+                editoraAtualizar.setText(livro.getEditora().getNome());
+                edicaoAtualizar.setText(Integer.toString(livro.getEdicao()));
+                generoBoxAtualizar.setSelectedItem(livro.getGenero());
+    
+            }
+			}
+		);
+		btnCarregar.setForeground(new Color(128, 128, 0));
+		btnCarregar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnCarregar.setFocusPainted(false);
+		btnCarregar.setBackground(new Color(240,240,240));
+		btnCarregar.setBounds(256, 131, 160, 31);
+		panel_3.add(btnCarregar);
+		
+		JLabel lblNewLabel_2_6 = new JLabel("Nome");
+		lblNewLabel_2_6.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_6.setBounds(10, 188, 46, 14);
+		panel_3.add(lblNewLabel_2_6);
+		
+		nomeAtualizar = new JTextField();
+		nomeAtualizar.setColumns(10);
+		nomeAtualizar.setBounds(10, 213, 285, 20);
+		panel_3.add(nomeAtualizar);
+		
+		JLabel lblNewLabel_2_7 = new JLabel("Autor");
+		lblNewLabel_2_7.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_7.setBounds(10, 267, 46, 14);
+		panel_3.add(lblNewLabel_2_7);
+		
+		autorAtualizar = new JTextField();
+		autorAtualizar.setColumns(10);
+		autorAtualizar.setBounds(10, 292, 285, 20);
+		panel_3.add(autorAtualizar);
+		
+		JLabel lblNewLabel_2_1_3_1_2 = new JLabel("Editora");
+		lblNewLabel_2_1_3_1_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_1_3_1_2.setBounds(310, 345, 46, 14);
+		panel_3.add(lblNewLabel_2_1_3_1_2);
+		
+		editoraAtualizar = new JTextField();
+		editoraAtualizar.setColumns(10);
+		editoraAtualizar.setBounds(198, 370, 285, 20);
+		panel_3.add(editoraAtualizar);
+		
+		JLabel lblNewLabel_2_1_3_1_1_2 = new JLabel("Gênero");
+		lblNewLabel_2_1_3_1_1_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_1_3_1_1_2.setBounds(364, 188, 59, 14);
+		panel_3.add(lblNewLabel_2_1_3_1_1_2);
+		
+	
+		
+		JLabel lblNewLabel_2_1_3_1_1_1_2 = new JLabel("Edição");
+		lblNewLabel_2_1_3_1_1_1_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_1_3_1_1_1_2.setBounds(364, 268, 59, 14);
+		panel_3.add(lblNewLabel_2_1_3_1_1_1_2);
+		
+		edicaoAtualizar = new JTextField();
+		edicaoAtualizar.setColumns(10);
+		edicaoAtualizar.setBounds(364, 292, 285, 20);
+		panel_3.add(edicaoAtualizar);
+		
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 String isbn = isbnAtualizar.getText().trim();
+			        if (isbn.isEmpty()) {
+			            JOptionPane.showMessageDialog(contentPane, "Digite um ISBN para atualizar.", "Alerta", JOptionPane.WARNING_MESSAGE);
+			            return;
+			        }
+
+			        String nomeEditora = "Nome da Editora"; 
+			        Editora editora = EditoraController.buscarEditora(nomeEditora);
+			        if (editora == null) {
+			            JOptionPane.showMessageDialog(contentPane, "Editora não encontrada. Atualização não pode ser realizada.", "Erro", JOptionPane.ERROR_MESSAGE);
+			            return;
+			        }
+
+			        Livro livroAtualizado = new Livro(
+			            nomeAtualizar.getText(),
+			            editora,
+			            autorAtualizar.getText(),
+			            Integer.parseInt(edicaoAtualizar.getText()), 
+			            generoBoxAtualizar.getSelectedItem().toString(),
+			            isbn,
+			            "", 
+			            0
+			        );
+
+			        if (LivroController.atualizarLivro(isbn, livroAtualizado)) {
+			            JOptionPane.showMessageDialog(contentPane, "Livro atualizado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			        } else {
+			            JOptionPane.showMessageDialog(contentPane, "Falha ao atualizar livro.", "Erro", JOptionPane.ERROR_MESSAGE);
+			        }
+			    }
+			}
+		);
+		btnEditar.setForeground(new Color(128, 128, 0));
+		btnEditar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnEditar.setFocusPainted(false);
+		btnEditar.setBackground(new Color(240,240,240));
+		btnEditar.setBounds(256, 441, 160, 31);
+		panel_3.add(btnEditar);
 		
 		JLabel lblNewLabel = new JLabel("PAINEL DE CONTROLE(ADM)");
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 28));
 		lblNewLabel.setBounds(173, 11, 369, 35);
 		contentPane.add(lblNewLabel);
+		
+
+		Panel painelEmprestimo = new Panel();
+		painelEmprestimo.setBackground(SystemColor.controlHighlight);
+		tabbedPane.addTab("Fazer empréstimo", null, painelEmprestimo, null);
+		painelEmprestimo.setLayout(null);
+		
+		JLabel titleEmprestimo = new JLabel("FAZER EMPRÉSTIMO DE LIVROS");
+		titleEmprestimo.setHorizontalAlignment(SwingConstants.CENTER);
+		titleEmprestimo.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		titleEmprestimo.setBounds(180, 11, 310, 25);
+		painelEmprestimo.add(titleEmprestimo);
+		
+		JLabel lblISBN = new JLabel("ISBN");
+		lblISBN.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblISBN.setBounds(10, 149, 33, 14);
+		painelEmprestimo.add(lblISBN);
+		
+		campoIsbn = new JTextField();
+		campoIsbn.setColumns(10);
+		campoIsbn.setBounds(10, 169, 285, 20);
+		painelEmprestimo.add(campoIsbn);
+		
+		JLabel lblMatricula = new JLabel("Matrícula do Aluno");
+		lblMatricula.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblMatricula.setBounds(10, 225, 130, 14);
+		painelEmprestimo.add(lblMatricula);
+		
+		campoMatricula = new JTextField();
+		campoMatricula.setColumns(10);
+		campoMatricula.setBounds(10, 250, 285, 20);
+		painelEmprestimo.add(campoMatricula);
+		
+		JButton btnFazerEmprestimo = new JButton("Fazer empréstimo");
+		btnFazerEmprestimo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(campoIsbn.getText().isBlank() || campoMatricula.getText().isBlank()) {
+		            JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos", "Erro", JOptionPane.INFORMATION_MESSAGE);
+		            return;
+				}
+				
+				
+				if(LivroDAO.verificarDisponibilidade(campoIsbn.getText()).equals("Disponível")) {
+					if(EmprestimoController.fazerEmprestimo(campoIsbn.getText(), campoMatricula.getText())) {
+			            JOptionPane.showMessageDialog(contentPane, "Empréstimo feito com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			            limparDadosEmprestimo();
+					} else {
+						JOptionPane.showMessageDialog(contentPane, "Erro ao fazer empréstimo, por favor verifique os dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "Livro indisponível.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		btnFazerEmprestimo.setForeground(new Color(128, 128, 0));
+		btnFazerEmprestimo.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnFazerEmprestimo.setFocusPainted(false);
+		btnFazerEmprestimo.setBackground(new Color(240,240,240));
+		btnFazerEmprestimo.setBounds(242, 382, 160, 31);
+		painelEmprestimo.add(btnFazerEmprestimo);
+		
+		JLabel lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.setIcon(new ImageIcon("./img/emprestimo.png"));
+		lblNewLabel_5.setBounds(360, 88, 271, 280);
+		painelEmprestimo.add(lblNewLabel_5);
+		
+
+		Panel painelDevolucao =  new Panel();
+		painelDevolucao.setBackground(SystemColor.controlHighlight);
+		tabbedPane.addTab("Devolver livro", null, painelDevolucao, null);
+		painelDevolucao.setLayout(null);
+		
+		JLabel titleDevolucao = new JLabel("DEVOLVER LIVRO AO ACERVO");
+		titleDevolucao.setHorizontalAlignment(SwingConstants.CENTER);
+		titleDevolucao.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		titleDevolucao.setBounds(180, 11, 310, 25);
+		painelDevolucao.add(titleDevolucao);
+		
+		JLabel isbnDevolucao = new JLabel("ISBN");
+		isbnDevolucao.setFont(new Font("Arial", Font.PLAIN, 15));
+		isbnDevolucao.setBounds(10, 149, 33, 14);
+		painelDevolucao.add(isbnDevolucao);
+		
+		campoIsbnDevolucao = new JTextField();
+		campoIsbnDevolucao.setColumns(10);
+		campoIsbnDevolucao.setBounds(10, 169, 285, 20);
+		painelDevolucao.add(campoIsbnDevolucao);
+		
+		campoMatriculaDevolucao = new JTextField();
+		campoMatriculaDevolucao.setColumns(10);
+		campoMatriculaDevolucao.setBounds(10, 250, 285, 20);
+		painelDevolucao.add(campoMatriculaDevolucao);
+		
+		JButton btnDevolverLivro = new JButton("Devolver livro");
+		btnDevolverLivro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(campoIsbnDevolucao.getText().isBlank() || campoMatriculaDevolucao.getText().isBlank()) {
+		            JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos", "Erro", JOptionPane.INFORMATION_MESSAGE);
+		            return;
+				}
+				
+				if(EmprestimoController.devolverLivro(campoIsbnDevolucao.getText(), campoMatriculaDevolucao.getText())) {
+					 JOptionPane.showMessageDialog(contentPane, "Devolução feita com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			            limparDadosDevolucao();
+			} else {
+				JOptionPane.showMessageDialog(contentPane, "Erro ao devolver livro, por favor verifique os dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+			}
+			}
+		});
+		btnDevolverLivro.setForeground(new Color(128, 128, 0));
+		btnDevolverLivro.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnDevolverLivro.setFocusPainted(false);
+		btnDevolverLivro.setBackground(UIManager.getColor("Button.background"));
+		btnDevolverLivro.setBounds(242, 382, 160, 31);
+		painelDevolucao.add(btnDevolverLivro);
+		
+		JLabel matriculaDevolucao = new JLabel("Matrícula do Aluno");
+		matriculaDevolucao.setFont(new Font("Arial", Font.PLAIN, 15));
+		matriculaDevolucao.setBounds(10, 225, 130, 14);
+		painelDevolucao.add(matriculaDevolucao);
 		
 		JButton btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {
@@ -380,5 +670,42 @@ public class ConfigBibliotecario extends JFrame {
 		btnDeslogar.setBackground(new Color(240,240,240));
 		btnDeslogar.setFocusPainted(false);
 		contentPane.add(btnDeslogar);
+	}
+	
+
+	private void limparCamposUsuario() {
+		txtNome.setText("");
+		txtEmail.setText("");
+		txtSenha.setText("");
+		txtCurso.setText("");
+		txtMatricula.setText("");
+	}
+	
+
+	private void limparCamposLivro() {
+		nomeLivro.setText("");
+		autorLivro.setText("");
+		generoBox.setSelectedIndex(0);
+		isbnLivro.setText("");
+		edicaoLivro.setText("");
+		editoraLivro.setText("");
+	}
+	
+	private void limparDadosEditora() {
+		campoNome.setText("");
+		campoEndereco.setText("");
+		campoTelefone.setText("");
+		campoEmail.setText("");
+	}
+	
+
+	private void limparDadosEmprestimo() {
+		campoIsbn.setText("");
+		campoMatricula.setText("");
+	}
+
+	private void limparDadosDevolucao() {
+		campoMatriculaDevolucao.setText("");
+		campoIsbnDevolucao.setText("");
 	}
 }

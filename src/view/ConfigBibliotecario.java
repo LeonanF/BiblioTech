@@ -555,6 +555,12 @@ public class ConfigBibliotecario extends JFrame {
 		JButton btnFazerEmprestimo = new JButton("Fazer empréstimo");
 		btnFazerEmprestimo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if(campoIsbn.getText().isBlank() || campoMatricula.getText().isBlank()) {
+		            JOptionPane.showMessageDialog(contentPane, "Todos os campos devem ser preenchidos", "Erro", JOptionPane.INFORMATION_MESSAGE);
+		            return;
+				}
+				
 				if(LivroDAO.verificarDisponibilidade(campoIsbn.getText()).equals("Disponível")) {
 					if(EmprestimoController.fazerEmprestimo(campoIsbn.getText(), campoMatricula.getText())) {
 			            JOptionPane.showMessageDialog(contentPane, "Empréstimo feito com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -563,7 +569,6 @@ public class ConfigBibliotecario extends JFrame {
 					}
 				} else {
 					JOptionPane.showMessageDialog(contentPane, "Livro indisponível.", "Erro", JOptionPane.INFORMATION_MESSAGE);
-					System.out.println(LivroDAO.verificarDisponibilidade(campoIsbn.getText()));
 				}
 			}
 		});

@@ -495,7 +495,7 @@ public class ConfigBibliotecario extends JFrame {
 			            return;
 			        }
 
-			        String nomeEditora = "Nome da Editora"; 
+			        String nomeEditora = editoraAtualizar.getText().trim(); 
 			        Editora editora = EditoraController.buscarEditora(nomeEditora);
 			        if (editora == null) {
 			            JOptionPane.showMessageDialog(contentPane, "Editora não encontrada. Atualização não pode ser realizada.", "Erro", JOptionPane.ERROR_MESSAGE);

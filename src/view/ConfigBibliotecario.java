@@ -30,6 +30,8 @@ import java.text.ParseException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.SystemColor;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 
 public class ConfigBibliotecario extends JFrame {
@@ -51,6 +53,8 @@ public class ConfigBibliotecario extends JFrame {
 	
 	private JTextField edicaoLivro;
 	private JTextField isbnLivro;
+	private JTextField campoIsbn;
+	private JTextField campoMatricula;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigBibliotecario() {
@@ -364,6 +368,50 @@ public class ConfigBibliotecario extends JFrame {
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 28));
 		lblNewLabel.setBounds(173, 11, 369, 35);
 		contentPane.add(lblNewLabel);
+		
+
+		Panel painelEmprestimo = new Panel();
+		painelEmprestimo.setBackground(SystemColor.controlHighlight);
+		tabbedPane.addTab("Fazer empréstimo", null, painelEmprestimo, null);
+		painelEmprestimo.setLayout(null);
+		
+		JLabel titleEmprestimo = new JLabel("FAZER EMPRÉSTIMO");
+		titleEmprestimo.setHorizontalAlignment(SwingConstants.CENTER);
+		titleEmprestimo.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		titleEmprestimo.setBounds(237, 11, 220, 25);
+		painelEmprestimo.add(titleEmprestimo);
+		
+		JLabel lblISBN = new JLabel("ISBN");
+		lblISBN.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblISBN.setBounds(348, 82, 33, 14);
+		painelEmprestimo.add(lblISBN);
+		
+		campoIsbn = new JTextField();
+		campoIsbn.setColumns(10);
+		campoIsbn.setBounds(227, 107, 285, 20);
+		painelEmprestimo.add(campoIsbn);
+		
+		JLabel lblMatricula = new JLabel("Matrícula do Aluno");
+		lblMatricula.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblMatricula.setBounds(327, 177, 130, 14);
+		painelEmprestimo.add(lblMatricula);
+		
+		campoMatricula = new JTextField();
+		campoMatricula.setColumns(10);
+		campoMatricula.setBounds(227, 202, 285, 20);
+		painelEmprestimo.add(campoMatricula);
+		
+		JButton btnFazerEmprestimo = new JButton("Fazer empréstimo");
+		btnFazerEmprestimo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnFazerEmprestimo.setForeground(new Color(128, 128, 0));
+		btnFazerEmprestimo.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnFazerEmprestimo.setFocusPainted(false);
+		btnFazerEmprestimo.setBackground(UIManager.getColor("Button.background"));
+		btnFazerEmprestimo.setBounds(265, 502, 160, 31);
+		painelEmprestimo.add(btnFazerEmprestimo);
 		
 		JButton btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {

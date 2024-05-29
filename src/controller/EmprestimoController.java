@@ -10,7 +10,17 @@ public class EmprestimoController {
 		return EmprestimoDAO.fazerEmprestimo(isbn, matricula);
 	}
 	
+
 	public static List<Emprestimo> buscarEmprestimosPorMatricula(String matricula) {
         return EmprestimoDAO.buscarEmprestimosPorMatricula(matricula);
     }
+
+	public static boolean devolverLivro(String isbn, String matricula) {
+		return EmprestimoDAO.devolverLivro(isbn, matricula);
+	}
+	
+	public static boolean renovarEmprestimo(String isbn, String matricula) {
+		return EmprestimoDAO.renovarEmprestimo(isbn, matricula);
+	}
+	
 }

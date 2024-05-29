@@ -221,19 +221,14 @@ public class ConfigAluno extends JFrame {
 		table.getColumnModel().getColumn(5).setPreferredWidth(85);
 		
 		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(SystemColor.controlHighlight);
-		tabbedPane.addTab("Renovar Empréstimo", null, panel_3, null);
-		panel_3.setLayout(null);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(SystemColor.controlHighlight);
-		tabbedPane.addTab("Verificação de Empréstimos", null, panel_1, null);
+		tabbedPane.addTab("Verificação e Renovação de Empréstimos", null, panel_1, null);
 		panel_1.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("VERIFICAR EMPRÉSTIMO DE LIVRO");
+		JLabel lblNewLabel = new JLabel("VERIFICAR E RENOVAR EMPRÉSTIMO DE LIVRO");
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
-		lblNewLabel.setBounds(170, 11, 323, 35);
+		lblNewLabel.setBounds(109, 11, 427, 35);
 		panel_1.add(lblNewLabel);
 		
 		JLabel lblNewLabel_2_3 = new JLabel("Matrícula");
@@ -279,7 +274,7 @@ public class ConfigAluno extends JFrame {
 		btnVerificar.setFont(new Font("Arial", Font.PLAIN, 12));
 		btnVerificar.setFocusPainted(false);
 		btnVerificar.setBackground(new Color(240,240,240));
-		btnVerificar.setBounds(268, 161, 105, 23);
+		btnVerificar.setBounds(185, 160, 105, 23);
 		panel_1.add(btnVerificar);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -295,6 +290,14 @@ public class ConfigAluno extends JFrame {
 				"ID", "ISBN", "Matricula", "Data_Emprestimo", "Data_Devolucao_Estimada", "Status_Emprestimo"
 			}
 		));
+		
+		JButton btnRenovar = new JButton("Renovar");
+		btnRenovar.setForeground(new Color(128, 128, 0));
+		btnRenovar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnRenovar.setFocusPainted(false);
+		btnRenovar.setBackground(UIManager.getColor("Button.background"));
+		btnRenovar.setBounds(348, 160, 105, 23);
+		panel_1.add(btnRenovar);
 		table_1.getColumnModel().getColumn(3).setPreferredWidth(98);
 		table_1.getColumnModel().getColumn(4).setPreferredWidth(140);
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(116);

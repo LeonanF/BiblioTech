@@ -20,8 +20,11 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
 
+import controller.EmprestimoController;
 import controller.LivroController;
+import model.Emprestimo;
 import model.Livro;
+import javax.swing.UIManager;
 
 
 public class ConfigAluno extends JFrame {
@@ -36,6 +39,8 @@ public class ConfigAluno extends JFrame {
 	private String selectedIsbn = "";
 	@SuppressWarnings("unused")
 	private final String matricula;
+	private JTextField matriculaField;
+	private JTable table_1;
 
 
 	public ConfigAluno(String matricula) {
@@ -56,6 +61,8 @@ public class ConfigAluno extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 54, 664, 566);
 		contentPane.add(tabbedPane);
+		
+
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(SystemColor.controlHighlight);
@@ -218,6 +225,79 @@ public class ConfigAluno extends JFrame {
 		panel_3.setBackground(SystemColor.controlHighlight);
 		tabbedPane.addTab("Renovar Empréstimo", null, panel_3, null);
 		panel_3.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(SystemColor.controlHighlight);
+		tabbedPane.addTab("Verificação de Empréstimos", null, panel_1, null);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("VERIFICAR EMPRÉSTIMO DE LIVRO");
+		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		lblNewLabel.setBounds(170, 11, 323, 35);
+		panel_1.add(lblNewLabel);
+		
+		JLabel lblNewLabel_2_3 = new JLabel("Matrícula");
+		lblNewLabel_2_3.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_3.setBounds(287, 84, 68, 14);
+		panel_1.add(lblNewLabel_2_3);
+		
+		matriculaField = new JTextField();
+		matriculaField.setColumns(10);
+		matriculaField.setBounds(185, 109, 268, 20);
+		panel_1.add(matriculaField);
+		
+		JButton btnVerificar = new JButton("Verificar");
+		btnVerificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String matricula = matriculaField.getText().trim();
+                if (!matricula.isEmpty()) {
+                    List<Emprestimo> emprestimos = EmprestimoController.buscarEmprestimosPorMatricula(matricula);
+                    DefaultTableModel model = (DefaultTableModel) table_1.getModel();
+                    model.setRowCount(0); 
+                    for (Emprestimo emprestimo : emprestimos) {
+                        model.addRow(new Object[]{
+                            emprestimo.getId(),
+                            emprestimo.getIsbn(),
+                            emprestimo.getMatricula(),
+                            emprestimo.getDataEmprestimo(),
+                            emprestimo.getDataDevolucaoEstimada(),
+                            emprestimo.getStatusEmprestimo()
+                        });
+                    }
+                    if (emprestimos.isEmpty()) {
+                        JOptionPane.showMessageDialog(contentPane, "Nenhum empréstimo encontrado para a matrícula informada.", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(contentPane, "Por favor, informe uma matrícula.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                matriculaField.setText("");
+            }
+			}
+		);
+		btnVerificar.setForeground(new Color(128, 128, 0));
+		btnVerificar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnVerificar.setFocusPainted(false);
+		btnVerificar.setBackground(new Color(240,240,240));
+		btnVerificar.setBounds(268, 161, 105, 23);
+		panel_1.add(btnVerificar);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 217, 639, 310);
+		panel_1.add(scrollPane_1);
+		
+		table_1 = new JTable();
+		scrollPane_1.setViewportView(table_1);
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"ID", "ISBN", "Matricula", "Data_Emprestimo", "Data_Devolucao_Estimada", "Status_Emprestimo"
+			}
+		));
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(98);
+		table_1.getColumnModel().getColumn(4).setPreferredWidth(140);
+		table_1.getColumnModel().getColumn(5).setPreferredWidth(116);
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBackground(SystemColor.controlHighlight);

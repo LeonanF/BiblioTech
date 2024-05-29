@@ -5,7 +5,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import DAO.LivroDAO;
 import controller.EditoraController;
+import controller.EmprestimoController;
 import controller.LivroController;
 import controller.UsuarioController;
 import model.Editora;
@@ -553,6 +555,16 @@ public class ConfigBibliotecario extends JFrame {
 		JButton btnFazerEmprestimo = new JButton("Fazer empréstimo");
 		btnFazerEmprestimo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(LivroDAO.verificarDisponibilidade(campoIsbn.getText()).equals("Disponível")) {
+					if(EmprestimoController.fazerEmprestimo(campoIsbn.getText(), campoMatricula.getText())) {
+			            JOptionPane.showMessageDialog(contentPane, "Empréstimo feito com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(contentPane, "Erro ao fazer empréstimo, por favor verifique os dados.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "Livro indisponível.", "Erro", JOptionPane.INFORMATION_MESSAGE);
+					System.out.println(LivroDAO.verificarDisponibilidade(campoIsbn.getText()));
+				}
 			}
 		});
 		btnFazerEmprestimo.setForeground(new Color(128, 128, 0));

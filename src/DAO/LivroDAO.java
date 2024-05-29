@@ -173,6 +173,27 @@ public class LivroDAO {
 	    return worked;
 	}
 	
+	public static String verificarDisponibilidade(String isbn) {
+			String disponibilidade = "";
+		    ConnectionDB db = new ConnectionDB(); 
+		    Connection conn = db.getConnection();
+		        
+		    try {
+		        String query = "SELECT DISPONIBILIDADE FROM LIVROS WHERE ISBN = ?";
+		        PreparedStatement ps = conn.prepareStatement(query);
+		        ps.setString(1, isbn);
+		        
+		        ResultSet rs = ps.executeQuery();
+		        
+		        if(rs.next())
+		        	disponibilidade = rs.getString("DISPONIBILIDADE");
+		        
+		    } catch(SQLException e) {
+		        e.printStackTrace();
+		    }
+		        
+		    return disponibilidade;
+	}
 
 }
 	

@@ -286,10 +286,6 @@ public class ConfigAluno extends JFrame {
 		btnRenovar.setBounds(280, 162, 105, 23);
         panel_1.add(btnRenovar);
 		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(SystemColor.controlHighlight);
-		tabbedPane.addTab("Devolver Livros", null, panel_4, null);
-		panel_4.setLayout(null);
 		
 		JButton btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {

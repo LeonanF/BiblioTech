@@ -139,7 +139,7 @@ public class ConfigAluno extends JFrame {
                         livro.getAutor(),
                         livro.getGenero(),
                         livro.getISBN(),
-                        livro.getEditora().getNome(),
+                        livro.getEditora(),
                         "Disponível" 
                     });
                     

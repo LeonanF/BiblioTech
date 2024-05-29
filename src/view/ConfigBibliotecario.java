@@ -30,7 +30,7 @@ import java.text.ParseException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.SystemColor;
-import javax.swing.UIManager;
+
 
 public class ConfigBibliotecario extends JFrame {
 
@@ -375,7 +375,7 @@ public class ConfigBibliotecario extends JFrame {
 			}
 		});
 		btnDeslogar.setFont(new Font("Arial", Font.PLAIN, 12));
-		btnDeslogar.setBounds(281, 627, 105, 23);
+		btnDeslogar.setBounds(560, 627, 114, 23);
 		btnDeslogar.setForeground(new Color(128, 128, 0));
 		btnDeslogar.setBackground(new Color(240,240,240));
 		btnDeslogar.setFocusPainted(false);

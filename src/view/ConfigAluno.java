@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.LivroController;
 import model.Livro;
 
+
 public class ConfigAluno extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -52,11 +53,11 @@ public class ConfigAluno extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(SystemColor.controlHighlight);
-		tabbedPane.addTab("Consultar Livros", null, panel, null);
+		tabbedPane.addTab("Consultar Livros e Reservar Livros", null, panel, null);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("CONSULTA DE LIVROS");
-		lblNewLabel_1.setBounds(216, 11, 209, 25);
+		JLabel lblNewLabel_1 = new JLabel("CONSULTA E RESERVA DE LIVROS");
+		lblNewLabel_1.setBounds(173, 11, 314, 25);
 		lblNewLabel_1.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
 		panel.add(lblNewLabel_1);
 		
@@ -149,11 +150,11 @@ public class ConfigAluno extends JFrame {
 		btnConsultar.setFont(new Font("Arial", Font.PLAIN, 12));
 		btnConsultar.setFocusPainted(false);
 		btnConsultar.setBackground(new Color(240,240,240));
-		btnConsultar.setBounds(275, 213, 105, 23);
+		btnConsultar.setBounds(274, 213, 105, 23);
 		panel.add(btnConsultar);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 247, 639, 280);
+		scrollPane.setBounds(10, 247, 639, 251);
 		panel.add(scrollPane);
 		
 		table = new JTable();
@@ -173,6 +174,18 @@ public class ConfigAluno extends JFrame {
 			}
 			
 		});
+		
+		JButton btnReservar = new JButton("Reservar");
+		btnReservar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnReservar.setForeground(new Color(128, 128, 0));
+		btnReservar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnReservar.setFocusPainted(false);
+		btnReservar.setBackground(new Color(240,240,240));
+		btnReservar.setBounds(274, 509, 105, 23);
+		panel.add(btnReservar);
 		table.getColumnModel().getColumn(5).setPreferredWidth(85);
 		
 		JPanel panel_2 = new JPanel();
@@ -189,6 +202,22 @@ public class ConfigAluno extends JFrame {
 		panel_4.setBackground(SystemColor.controlHighlight);
 		tabbedPane.addTab("Devolver Livros", null, panel_4, null);
 		panel_4.setLayout(null);
+		
+		JButton btnDeslogar = new JButton("Deslogar");
+		btnDeslogar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PaginaInicial objpaginainicial = new PaginaInicial();
+				objpaginainicial.setVisible(true);
+				
+				dispose();
+			}
+		});
+		btnDeslogar.setForeground(new Color(128, 128, 0));
+		btnDeslogar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnDeslogar.setFocusPainted(false);
+		btnDeslogar.setBackground(new Color(240,240,240));
+		btnDeslogar.setBounds(557, 627, 117, 23);
+		contentPane.add(btnDeslogar);
 	}
 	
 	private void limparCampo() {

@@ -489,7 +489,9 @@ public class ConfigBibliotecario extends JFrame {
 			            autorAtualizar.getText(),
 			            Integer.parseInt(edicaoAtualizar.getText()), 
 			            generoBoxAtualizar.getSelectedItem().toString(),
-			            isbn
+			            isbn,
+			            "", 
+			            0
 			        );
 
 			        if (LivroController.atualizarLivro(isbn, livroAtualizado)) {

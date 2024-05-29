@@ -105,7 +105,7 @@ public class LoginAluno extends JFrame {
             	 try {    ResultSet rs = UsuarioController.autenticacaoAluno(email_usuario, senha_usuario);	
                  if (rs!=null) {
                  	if(rs.next()){
-                         ConfigAluno objconfigaluno = new ConfigAluno();
+                         ConfigAluno objconfigaluno = new ConfigAluno(rs.getString("matricula_usuario"));
                          objconfigaluno.setVisible(true);
                          dispose();
                      }

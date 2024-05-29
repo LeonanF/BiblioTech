@@ -19,7 +19,7 @@ public class LivroDAO {
 		boolean worked = false;		
 		
 		try {
-			PreparedStatement psInsert = conn.prepareStatement("INSERT INTO LIVROS VALUES(?,?,?,?,?,?)");
+			PreparedStatement psInsert = conn.prepareStatement("INSERT INTO LIVROS(NOME, AUTOR, GENERO, ISBN, EDICAO, EDITORA) VALUES(?,?,?,?,?,?)");
 			psInsert.setString(1, livro.getNome());
 			psInsert.setString(2, livro.getAutor());
 			psInsert.setString(3, livro.getGenero());
@@ -67,7 +67,9 @@ public class LivroDAO {
                         rs.getString("autor"), 
                         rs.getInt("edicao"), 
                         rs.getString("genero"), 
-                        rs.getString("isbn")
+                        rs.getString("isbn"),
+                        rs.getString("disponibilidade"),
+                        rs.getInt("reservas")
                     );
                     livros.add(livro);
                 }
@@ -80,6 +82,7 @@ public class LivroDAO {
         return livros;
     }
 	
+
 	public static Livro buscarLivroPorISBN(String isbn) {
 	    ConnectionDB db = new ConnectionDB(); 
 	    Connection conn = db.getConnection();
@@ -103,7 +106,9 @@ public class LivroDAO {
 	                    rs.getString("autor"), 
 	                    rs.getInt("edicao"), 
 	                    rs.getString("genero"), 
-	                    rs.getString("isbn")
+	                    rs.getString("isbn"),
+	                    rs.getString("disponibilidade"),
+	                    rs.getInt("reservas")
 	                );
 	            }
 	        }
@@ -145,7 +150,29 @@ public class LivroDAO {
 	    } finally {
 	        db.closeConnection();
 	    }
-
+	
 	    return atualizado;
-}
 	}
+	public static boolean reservarLivro(String isbn, String matricula) {
+	    boolean worked = false;
+	    ConnectionDB db = new ConnectionDB(); 
+	    Connection conn = db.getConnection();
+	        
+	    try {
+	        String query = "INSERT INTO RESERVAS (ISBN, MATRICULA) VALUES (?, ?)";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, isbn);
+	        ps.setString(2, matricula);
+	            
+	        worked = ps.executeUpdate() > 0;
+	            
+	    } catch(SQLException e) {
+	        e.printStackTrace();
+	    }
+	        
+	    return worked;
+	}
+	
+
+}
+	

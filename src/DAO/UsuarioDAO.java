@@ -9,7 +9,7 @@ import model.Usuario;
 public class UsuarioDAO {
 	
 	
-	public static boolean cadastrarUsuario(Usuario usuario) {
+	public static Boolean cadastrarUsuario(Usuario usuario) {
 		Connection conn;
 		ConnectionDB db = new ConnectionDB();
 		PreparedStatement pstm;

@@ -168,6 +168,8 @@ public class ConfigBibliotecario extends JFrame {
 		        }
 				
 			}
+			
+		
 		});
 		btnCadastrarAluno.setForeground(new Color(128, 128, 0));
 		btnCadastrarAluno.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -595,4 +597,6 @@ public class ConfigBibliotecario extends JFrame {
 		btnDeslogar.setFocusPainted(false);
 		contentPane.add(btnDeslogar);
 	}
+	
+	
 }

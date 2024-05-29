@@ -5,11 +5,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
-import DAO.EditoraDAO;
-import DAO.UsuarioDAO;
 import controller.EditoraController;
 import controller.LivroController;
+import controller.UsuarioController;
 import model.Editora;
+import model.Livro;
 import model.Usuario;
 
 import java.awt.Panel;
@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 
+
 public class ConfigBibliotecario extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -55,8 +56,12 @@ public class ConfigBibliotecario extends JFrame {
 	private JTextField isbnLivro;
 	private JTextField campoIsbn;
 	private JTextField campoMatricula;
+	private JTextField isbnAtualizar;
+	private JTextField nomeAtualizar;
+	private JTextField autorAtualizar;
+	private JTextField editoraAtualizar;
+	private JTextField edicaoAtualizar;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigBibliotecario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 700);
@@ -150,7 +155,7 @@ public class ConfigBibliotecario extends JFrame {
 		            } else {
 		                Usuario usuario = new Usuario(Integer.parseInt(matricula), nome, senha, email, curso);
 
-		               if (UsuarioDAO.cadastrarUsuario(usuario)) {
+		               if (UsuarioController.cadastrarUsuario(usuario)) {
 		            	   JOptionPane.showMessageDialog(contentPane, "Aluno cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 		                } else {
 		                	JOptionPane.showMessageDialog(contentPane, "Dados inseridos incorretamente. Tente novamente!", "Alerta", JOptionPane.WARNING_MESSAGE);
@@ -254,7 +259,7 @@ public class ConfigBibliotecario extends JFrame {
 				    return;
 				}
 				
-				Editora editora = EditoraDAO.buscarEditora(editoraLivro.getText());
+				Editora editora = EditoraController.buscarEditora(editoraLivro.getText());
 				if(editora==null) {
 					JOptionPane.showMessageDialog(contentPane, "Cadastre a editora primeiro!", "Alerta", JOptionPane.WARNING_MESSAGE);
 					return;
@@ -363,6 +368,150 @@ public class ConfigBibliotecario extends JFrame {
 		Panel panel_3 = new Panel();
 		panel_3.setBackground(SystemColor.controlHighlight);
 		tabbedPane.addTab("Atualizar Livros", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("ATUALIZAR OS DADOS DO LIVRO");
+		lblNewLabel_1_2.setBounds(186, 11, 299, 25);
+		lblNewLabel_1_2.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		panel_3.add(lblNewLabel_1_2);
+		
+		JLabel lblNewLabel_2_5 = new JLabel("ISBN");
+		lblNewLabel_2_5.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_5.setBounds(318, 63, 38, 14);
+		panel_3.add(lblNewLabel_2_5);
+		
+		isbnAtualizar = new JTextField();
+		isbnAtualizar.setColumns(10);
+		isbnAtualizar.setBounds(212, 88, 252, 20);
+		panel_3.add(isbnAtualizar);
+		
+		@SuppressWarnings("rawtypes")
+		JComboBox <?> generoBoxAtualizar = new JComboBox();
+		generoBoxAtualizar.setModel(new DefaultComboBoxModel(new String[] {"", "Ação", "Aventura", "Romance", "Fantasia", "Literatura clássica", "Autoajuda", "Ciência de Dados"}));
+		generoBoxAtualizar.setSelectedIndex(0);
+		generoBoxAtualizar.setBounds(364, 212, 285, 25);
+		panel_3.add(generoBoxAtualizar);
+		
+		JButton btnCarregar = new JButton("Carregar");
+		btnCarregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String isbn = isbnAtualizar.getText().trim();
+                if (isbn.isEmpty()) {
+                    JOptionPane.showMessageDialog(contentPane, "Digite um ISBN para carregar.", "Alerta", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                Livro livro = LivroController.buscarLivroPorISBN(isbn);
+                if (livro == null) {
+                    JOptionPane.showMessageDialog(contentPane, "Livro não encontrado.", "Informação", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+                nomeAtualizar.setText(livro.getNome());
+                autorAtualizar.setText(livro.getAutor());
+                editoraAtualizar.setText(livro.getEditora().getNome());
+                edicaoAtualizar.setText(Integer.toString(livro.getEdicao()));
+                generoBoxAtualizar.setSelectedItem(livro.getGenero());
+    
+            }
+			}
+		);
+		btnCarregar.setForeground(new Color(128, 128, 0));
+		btnCarregar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnCarregar.setFocusPainted(false);
+		btnCarregar.setBackground(new Color(240,240,240));
+		btnCarregar.setBounds(256, 131, 160, 31);
+		panel_3.add(btnCarregar);
+		
+		JLabel lblNewLabel_2_6 = new JLabel("Nome");
+		lblNewLabel_2_6.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_6.setBounds(10, 188, 46, 14);
+		panel_3.add(lblNewLabel_2_6);
+		
+		nomeAtualizar = new JTextField();
+		nomeAtualizar.setColumns(10);
+		nomeAtualizar.setBounds(10, 213, 285, 20);
+		panel_3.add(nomeAtualizar);
+		
+		JLabel lblNewLabel_2_7 = new JLabel("Autor");
+		lblNewLabel_2_7.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_7.setBounds(10, 267, 46, 14);
+		panel_3.add(lblNewLabel_2_7);
+		
+		autorAtualizar = new JTextField();
+		autorAtualizar.setColumns(10);
+		autorAtualizar.setBounds(10, 292, 285, 20);
+		panel_3.add(autorAtualizar);
+		
+		JLabel lblNewLabel_2_1_3_1_2 = new JLabel("Editora");
+		lblNewLabel_2_1_3_1_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_1_3_1_2.setBounds(310, 345, 46, 14);
+		panel_3.add(lblNewLabel_2_1_3_1_2);
+		
+		editoraAtualizar = new JTextField();
+		editoraAtualizar.setColumns(10);
+		editoraAtualizar.setBounds(198, 370, 285, 20);
+		panel_3.add(editoraAtualizar);
+		
+		JLabel lblNewLabel_2_1_3_1_1_2 = new JLabel("Gênero");
+		lblNewLabel_2_1_3_1_1_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_1_3_1_1_2.setBounds(364, 188, 59, 14);
+		panel_3.add(lblNewLabel_2_1_3_1_1_2);
+		
+	
+		
+		JLabel lblNewLabel_2_1_3_1_1_1_2 = new JLabel("Edição");
+		lblNewLabel_2_1_3_1_1_1_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel_2_1_3_1_1_1_2.setBounds(364, 268, 59, 14);
+		panel_3.add(lblNewLabel_2_1_3_1_1_1_2);
+		
+		edicaoAtualizar = new JTextField();
+		edicaoAtualizar.setColumns(10);
+		edicaoAtualizar.setBounds(364, 292, 285, 20);
+		panel_3.add(edicaoAtualizar);
+		
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 String isbn = isbnAtualizar.getText().trim();
+			        if (isbn.isEmpty()) {
+			            JOptionPane.showMessageDialog(contentPane, "Digite um ISBN para atualizar.", "Alerta", JOptionPane.WARNING_MESSAGE);
+			            return;
+			        }
+
+			        String nomeEditora = "Nome da Editora"; 
+			        Editora editora = EditoraController.buscarEditora(nomeEditora);
+			        if (editora == null) {
+			            JOptionPane.showMessageDialog(contentPane, "Editora não encontrada. Atualização não pode ser realizada.", "Erro", JOptionPane.ERROR_MESSAGE);
+			            return;
+			        }
+
+			        Livro livroAtualizado = new Livro(
+			            nomeAtualizar.getText(),
+			            editora,
+			            autorAtualizar.getText(),
+			            Integer.parseInt(edicaoAtualizar.getText()), 
+			            generoBoxAtualizar.getSelectedItem().toString(),
+			            isbn,
+			            "", 
+			            0
+			        );
+
+			        if (LivroController.atualizarLivro(isbn, livroAtualizado)) {
+			            JOptionPane.showMessageDialog(contentPane, "Livro atualizado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			        } else {
+			            JOptionPane.showMessageDialog(contentPane, "Falha ao atualizar livro.", "Erro", JOptionPane.ERROR_MESSAGE);
+			        }
+			    }
+			}
+		);
+		btnEditar.setForeground(new Color(128, 128, 0));
+		btnEditar.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnEditar.setFocusPainted(false);
+		btnEditar.setBackground(new Color(240,240,240));
+		btnEditar.setBounds(256, 441, 160, 31);
+		panel_3.add(btnEditar);
 		
 		JLabel lblNewLabel = new JLabel("PAINEL DE CONTROLE(ADM)");
 		lblNewLabel.setFont(new Font("Bahnschrift", Font.PLAIN, 28));

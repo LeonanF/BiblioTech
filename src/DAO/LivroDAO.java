@@ -11,6 +11,8 @@ import model.Editora;
 import model.Livro;
 
 public class LivroDAO {
+	
+	
 	public static boolean cadastrarLivro(Livro livro) {
 		ConnectionDB db = new ConnectionDB(); 
 		Connection conn = db.getConnection();
@@ -80,6 +82,77 @@ public class LivroDAO {
         return livros;
     }
 	
+
+	public static Livro buscarLivroPorISBN(String isbn) {
+	    ConnectionDB db = new ConnectionDB(); 
+	    Connection conn = db.getConnection();
+	    Livro livro = null;
+
+	    try {
+	        String query = "SELECT * FROM LIVROS WHERE isbn = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, isbn);
+	        
+	        ResultSet rs = ps.executeQuery();
+	        
+	        if (rs.next()) {
+	            String nomeEditora = rs.getString("editora");
+	            Editora editora = EditoraDAO.buscarEditora(nomeEditora);
+	            
+	            if (editora != null) {
+	                livro = new Livro(
+	                    rs.getString("nome"), 
+	                    editora, 
+	                    rs.getString("autor"), 
+	                    rs.getInt("edicao"), 
+	                    rs.getString("genero"), 
+	                    rs.getString("isbn"),
+	                    rs.getString("disponibilidade"),
+	                    rs.getInt("reservas")
+	                );
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        db.closeConnection();
+	    }
+
+	    return livro;
+	}
+
+	public static boolean atualizarLivro(String isbnOriginal, Livro livroAtualizado) {
+	    ConnectionDB db = new ConnectionDB(); 
+	    Connection conn = db.getConnection();
+	    boolean atualizado = false;
+
+	    try {
+	        
+	        Editora editora = EditoraDAO.buscarEditora(livroAtualizado.getEditora().getNome());
+	        if (editora == null) {
+	            System.out.println("Editora não encontrada.");
+	            return false;
+	        }
+
+	        String query = "UPDATE LIVROS SET nome = ?, autor = ?, genero = ?, isbn = ?, edicao = ?, editora = ? WHERE isbn = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, livroAtualizado.getNome());
+	        ps.setString(2, livroAtualizado.getAutor());
+	        ps.setString(3, livroAtualizado.getGenero());
+	        ps.setString(4, livroAtualizado.getISBN());
+	        ps.setInt(5, livroAtualizado.getEdicao());
+	        ps.setString(6, livroAtualizado.getEditora().getNome());
+	        ps.setString(7, isbnOriginal);
+	        
+	        atualizado = ps.executeUpdate() > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        db.closeConnection();
+	    }
+	
+	    return atualizado;
+	}
 	public static boolean reservarLivro(String isbn, String matricula) {
 	    boolean worked = false;
 	    ConnectionDB db = new ConnectionDB(); 
@@ -100,4 +173,6 @@ public class LivroDAO {
 	    return worked;
 	}
 	
+
 }
+	

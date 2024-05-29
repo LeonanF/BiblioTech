@@ -34,6 +34,7 @@ public class ConfigAluno extends JFrame {
 	private JTextField isbnLivro;
 	private JTable table;
 	private String selectedIsbn = "";
+	@SuppressWarnings("unused")
 	private final String matricula;
 
 
@@ -156,8 +157,7 @@ public class ConfigAluno extends JFrame {
                     return;
                 }
 
-               
-                
+                     
                 model.setRowCount(0); 
 
                 for (Livro livro : livros) {

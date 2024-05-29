@@ -11,4 +11,8 @@ public class EmprestimoController {
 		return EmprestimoDAO.devolverLivro(isbn, matricula);
 	}
 	
+	public static boolean renovarEmprestimo(String isbn, String matricula) {
+		return EmprestimoDAO.renovarEmprestimo(isbn, matricula);
+	}
+	
 }

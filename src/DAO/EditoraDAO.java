@@ -25,8 +25,6 @@ public class EditoraDAO {
 			e.printStackTrace();
 		}
 		
-		db.closeConnection();
-		
 		return worked;
 		
 	}

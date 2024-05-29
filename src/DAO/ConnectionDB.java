@@ -7,7 +7,7 @@ public class ConnectionDB {
 	private Connection connection;
 	private final String URLDB = "jdbc:mysql://localhost:3306/bibliotech";
 	private final String user = "root";
-	private final String password = "";
+	private final String password = "root";
 	
 	public ConnectionDB() {
 		try {

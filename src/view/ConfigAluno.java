@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import javax.swing.JTabbedPane;
 import java.awt.SystemColor;
@@ -13,7 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -110,7 +108,12 @@ public class ConfigAluno extends JFrame {
                 String genero = generoLivro.getText().trim();
                 String isbn = isbnLivro.getText().trim();
 
-              
+                
+                if(titulo.isBlank() && autor.isBlank() && genero.isBlank() && isbn.isBlank()) {
+                	JOptionPane.showMessageDialog(contentPane, "Você deve preencher pelo menos um dos campos!", "Informação", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
                 List<Livro> livros = LivroController.consultarLivros(
                     titulo.isEmpty() ? null : titulo,
                     autor.isEmpty() ? null : autor,
@@ -126,6 +129,7 @@ public class ConfigAluno extends JFrame {
 
                
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
+                
                 model.setRowCount(0); 
 
                 for (Livro livro : livros) {
@@ -160,13 +164,16 @@ public class ConfigAluno extends JFrame {
 			new String[] {
 				"Nome", "Autor", "G\u00EAnero", "ISBN", "Editora", "Disponibilidade"
 			}
-		));
+		) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			
+		});
 		table.getColumnModel().getColumn(5).setPreferredWidth(85);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(SystemColor.controlHighlight);
-		tabbedPane.addTab("Reservar Livros", null, panel_1, null);
-		panel_1.setLayout(null);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(SystemColor.controlHighlight);
@@ -188,6 +195,6 @@ public class ConfigAluno extends JFrame {
 		nomeLivro.setText("");
 		autorLivro.setText("");
 		generoLivro.setText("");
-		isbnLivro.requestFocus();
+		isbnLivro.setText("");
 	}
 }

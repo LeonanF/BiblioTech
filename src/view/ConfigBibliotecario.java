@@ -52,6 +52,7 @@ public class ConfigBibliotecario extends JFrame {
 	private JTextField edicaoLivro;
 	private JTextField isbnLivro;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ConfigBibliotecario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 700);
@@ -214,7 +215,7 @@ public class ConfigBibliotecario extends JFrame {
 		lblNewLabel_2_1_3_1_1.setBounds(10, 237, 59, 14);
 		panel_1.add(lblNewLabel_2_1_3_1_1);
 		
-		JComboBox generoBox = new JComboBox();
+		JComboBox<?> generoBox = new JComboBox();
 		generoBox.setModel(new DefaultComboBoxModel(new String[] {"", "Ação", "Aventura", "Romance", "Fantasia", "Literatura clássica", "Autoajuda", "Ciência de Dados"}));
 		generoBox.setSelectedIndex(0);
 		generoBox.setBounds(10, 262, 285, 25);
@@ -266,7 +267,7 @@ public class ConfigBibliotecario extends JFrame {
 		btnCadastrarLivro.setForeground(new Color(128, 128, 0));
 		btnCadastrarLivro.setFont(new Font("Arial", Font.PLAIN, 15));
 		btnCadastrarLivro.setFocusPainted(false);
-		btnCadastrarLivro.setBackground(UIManager.getColor("Button.background"));
+		btnCadastrarLivro.setBackground(new Color(240,240,240));
 		btnCadastrarLivro.setBounds(69, 478, 160, 31);
 		panel_1.add(btnCadastrarLivro);
 		

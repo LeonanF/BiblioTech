@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class ConnectionDB {
 	private Connection connection;
-	private final String URLDB = "jdbc:mysql://localhost:3306/BiblioTech";
+	private final String URLDB = "jdbc:mysql://localhost:3306/bibliotech";
 	private final String user = "root";
-	private final String password = "root";
+	private final String password = "";
 	
 	public ConnectionDB() {
 		try {

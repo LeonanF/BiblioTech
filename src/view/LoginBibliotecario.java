@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.JFrame;
+import java.sql.SQLException;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import controller.UsuarioController;
@@ -104,18 +105,19 @@ public class LoginBibliotecario extends JFrame {
             if (usuario_bibliotecario.isEmpty() || senha_bibliotecario.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos para fazer login.");
             } else {
-
-            	ResultSet rs = UsuarioController.autenticacaoBibliotecario(usuario_bibliotecario, senha_bibliotecario);
-            	
+                try {    ResultSet rs = UsuarioController.autenticacaoBibliotecario(usuario_bibliotecario, senha_bibliotecario);	
                 if (rs!=null) {
-                    ConfigBibliotecario objconfigbibliotecario = new ConfigBibliotecario();
-                    objconfigbibliotecario.setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Usuário ou Senha Inválidos");
+                	if(rs.next()){
+                        ConfigBibliotecario objconfigbibliotecario = new ConfigBibliotecario();
+                        objconfigbibliotecario.setVisible(true);
+                        dispose();
+                    }
+                else {
+                        JOptionPane.showMessageDialog(null, "Usuário ou Senha Inválidos");
+                }}
+                }catch(SQLException erro){
+                		erro.printStackTrace();
                 }
             }
-
-    }
-
+    	}
 }

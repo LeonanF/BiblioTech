@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
@@ -101,18 +102,19 @@ public class LoginAluno extends JFrame {
             if (email_usuario.isEmpty() || senha_usuario.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos para fazer login.");
             } else 
-            {
-
-            	ResultSet rs = UsuarioController.autenticacaoAluno(email_usuario, senha_usuario);
-            	
-                if (rs != null) {
-                    ConfigAluno objconfigaluno = new ConfigAluno();
-                    objconfigaluno.setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "E-mail ou Senha Inválidos");
-                }
-            }
+            	 try {    ResultSet rs = UsuarioController.autenticacaoAluno(email_usuario, senha_usuario);	
+                 if (rs!=null) {
+                 	if(rs.next()){
+                         ConfigAluno objconfigaluno = new ConfigAluno();
+                         objconfigaluno.setVisible(true);
+                         dispose();
+                     }
+                 else {
+                         JOptionPane.showMessageDialog(null, "E-mail ou Senha Inválidos");
+                 }}
+                 }catch(SQLException erro){
+                 		erro.printStackTrace();
+                 }
         
 
     }

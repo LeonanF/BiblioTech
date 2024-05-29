@@ -62,8 +62,6 @@ public class UsuarioDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
-		db.closeConnection();
 		
 		return rs;
 	}
@@ -88,7 +86,6 @@ public class UsuarioDAO {
 			e.printStackTrace();
 		}
 		
-		db.closeConnection();
 		return rs;
 		
 	}
